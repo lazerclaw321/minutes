@@ -1,5 +1,5 @@
 public class WaveSpawner {
-    int wave = 0;
+    int wave = 5;
     public void nextWave() {
         wave++;
         Main.timeCounter = 0;
@@ -24,7 +24,7 @@ public class WaveSpawner {
                 Main.enemies.add(new Enemy(300, 300, 20, 20, 0.2, 20, "ranged", 50));
                 Main.enemies.add(new Enemy(200, 200, 20, 20, 0.2, 20, "ranged", 50));
                 //MEGA BASIC
-                Main.enemies.add(new Enemy(100, 100, 35, 35, 0.9, 200, "basic", 250));
+                Main.enemies.add(new Enemy(100, 100, 35, 35, 0.6, 200, "basic", 250));
                 Main.upgrading = true;
                 break;
             case 5:
@@ -50,7 +50,7 @@ public class WaveSpawner {
             case 9:
                 Main.enemies.add(new Enemy(100, 100, 30, 30, 0.5, 400, "miniboss", 200));
                 Main.enemies.add(new Enemy(100, 100, 15, 15, 0.5, 60, "archer", 200));
-                Main.enemies.add(new Enemy(100, 100, 35, 35, 0.9, 200, "basic", 250));
+                Main.enemies.add(new Enemy(100, 100, 35, 35, 0.6, 200, "basic", 250));
                 Main.upgrading = true;
                 break;
             case 10:

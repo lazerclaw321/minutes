@@ -10,6 +10,7 @@ public class Enemy extends Collidable {
     int counter = 0;
     int counter2 = 0;
     int counter3 = 0;
+    int counter4 = 0;
     double[] targetPosition = {0, 0};
     
     int stun = 0;
@@ -86,7 +87,7 @@ public class Enemy extends Collidable {
                     targetX, 
                     targetY
                 ), 
-                3, 300, 10, false, 10, 0, "bullet"
+                2, 300, 10, false, 10, 0, "bullet"
             );
             Main.projectiles.add(p);
             counter = cooldown;
@@ -103,7 +104,7 @@ public class Enemy extends Collidable {
                     targetX, 
                     targetY
                 ), 
-                2.5, 50, 5, false, 50, 0, "bullet"
+                1, 50, 5, false, 50, 0, "bullet"
             ));
             Main.projectiles.add(new Projectile(
                 x, y, 10, 10, 
@@ -111,7 +112,7 @@ public class Enemy extends Collidable {
                     targetX, 
                     targetY
                 ) + 0.5, 
-                2.5, 50, 5, false, 50, 0, "bullet"
+                1, 50, 5, false, 50, 0, "bullet"
             ));
             Main.projectiles.add(new Projectile(
                 x, y, 10, 10, 
@@ -119,7 +120,7 @@ public class Enemy extends Collidable {
                     targetX, 
                     targetY
                 ) - 0.5, 
-                2.5, 250, 5, false, 50, 0, "bullet"
+                1, 250, 5, false, 50, 0, "bullet"
             ));
             counter = cooldown;
             stun += 60;
@@ -132,7 +133,7 @@ public class Enemy extends Collidable {
             if (distanceFrom(Main.player) <= width * 4) {
                 Projectile p = new Projectile(
                     x - width * 1.5, y - width * 1.5, width * 4, height * 4, 0, 
-                    0, 30, 25, false, 60, cooldown - 60, "smash"
+                    0, 30, 25, false, 60, cooldown - 120, "smash"
                 );
                 stun = 60;
                 counter = cooldown;
@@ -171,6 +172,7 @@ public class Enemy extends Collidable {
                 speed = 0.5;
             }
             if (counter <= 0) {
+                
                 if (distanceFrom(Main.player) <= width * 1.5) {
                     Projectile p = new Projectile(
                         x, y, (int)(width * 1.5), (int)(height * 1.5), 
@@ -178,12 +180,12 @@ public class Enemy extends Collidable {
                             targetX, 
                             targetY
                         ) + random.nextDouble() * 2 - 1, 
-                        0, 10, 15, false, 10, cooldown - 30, "slash"
+                        0, 10, 15, false, 40, cooldown - 60, "slash"
                     );
                     Main.projectiles.add(p);
                     p.moveInDirection(width, p.direction);
                     counter = cooldown;
-                    stun = 0;
+                    stun = 40;
                 }
                 else {
                     if (Math.random() > 0.5) {
@@ -217,9 +219,14 @@ public class Enemy extends Collidable {
                             }
                             Main.projectiles.add(p);
                             counter = cooldown;
-                            stun = 50;
+                            stun = 75;
                         }
                     }
+                }
+                counter3++;
+                if (counter3 >= 6 && counter2 <= 0) {
+                    stun = 480;
+                    counter3 = 0;
                 }
             }
         }
@@ -337,6 +344,7 @@ public class Enemy extends Collidable {
                             2.5, 500, 5, false, 50, 0, "bullet"
                         ));
                         counter = cooldown;
+                        stun = 50;
                     }
                 }
                 else if (Math.random() > 0.5) {
@@ -391,7 +399,6 @@ public class Enemy extends Collidable {
                     Main.projectiles.add(p);
                     p.moveInDirection(width, p.direction);
                     counter = cooldown/20;
-                    stun = 0;
                 }
                 else {
                     counter2 += 10;
@@ -471,6 +478,7 @@ public class Enemy extends Collidable {
                             0.5, 1500, 5, false, 50, 0, "bullet"
                         ));
                         counter = cooldown;
+                        stun = 50;
                     }
                 }
                 else {
@@ -484,6 +492,7 @@ public class Enemy extends Collidable {
                         p.moveInDirection(width, direction);
                         Main.projectiles.add(p);
                         counter = cooldown;
+                        stun = 100;
                     }
                 }
             }
@@ -664,6 +673,7 @@ public class Enemy extends Collidable {
                         Main.projectiles.add(p);
                         counter = cooldown;
                     }
+                    stun = 90;
                 }
                 else {
                     targetPosition[0] = pointTowards(targetX, targetY);
@@ -682,6 +692,11 @@ public class Enemy extends Collidable {
                         Main.projectiles.add(p);
                     }
                     stun = 50;
+                }
+                counter4++;
+                if (counter4 == 6) {
+                    stun = 480;
+                    counter4 = 0;
                 }
             }
 

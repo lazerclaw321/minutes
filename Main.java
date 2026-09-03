@@ -195,7 +195,6 @@ public class Main {
         }
     }
 
-
     public static void runTempo(String tempo) {
         tempoCounter = Math.max(tempoCounter - 1, 0);
         if (tempo == "Halt" || tempo == "Star") {
