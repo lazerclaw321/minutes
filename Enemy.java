@@ -104,7 +104,7 @@ public class Enemy extends Collidable {
                     targetX, 
                     targetY
                 ), 
-                1, 50, 5, false, 50, 0, "bullet"
+                2.5, 250, 5, false, 50, 0, "bullet"
             ));
             Main.projectiles.add(new Projectile(
                 x, y, 10, 10, 
@@ -112,7 +112,7 @@ public class Enemy extends Collidable {
                     targetX, 
                     targetY
                 ) + 0.5, 
-                1, 50, 5, false, 50, 0, "bullet"
+                2.5, 250, 5, false, 50, 0, "bullet"
             ));
             Main.projectiles.add(new Projectile(
                 x, y, 10, 10, 
@@ -120,7 +120,7 @@ public class Enemy extends Collidable {
                     targetX, 
                     targetY
                 ) - 0.5, 
-                1, 250, 5, false, 50, 0, "bullet"
+                2.5, 250, 5, false, 50, 0, "bullet"
             ));
             counter = cooldown;
             stun += 60;
@@ -260,6 +260,7 @@ public class Enemy extends Collidable {
                         ));
                         counter = cooldown;
                     }
+                    stun = 50;
                 }
                 else {
                     for (int i = 0; i < 10; i++) {
@@ -701,7 +702,6 @@ public class Enemy extends Collidable {
             }
 
             counter3++;
-            System.out.println(Main.fps + " " + counter3);
             if (counter3 >= Main.fps/40) {
                 Main.baseFps++;
                 Main.fps++;

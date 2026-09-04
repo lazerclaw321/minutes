@@ -62,6 +62,7 @@ public class Main {
         upgrades.initialize();
         upgrading = true;
         upgrades.upgrade(true);
+        player.upgrade("Swell");
         initiateTempo(tempo);
 
         while (true) {
@@ -115,9 +116,6 @@ public class Main {
                 }
             }
             runTempo(tempo);
-            for (int[] damage : damaged) {
-                    System.out.println(rewinded + " " + damage[0] + " " + damage[1]);
-                }
             if (rewinded == 1) {
                 for (int[] damage : damaged) {
                     if (timeCounter == damage[0]) {
@@ -288,14 +286,14 @@ public class Main {
                 }
             }
             else {
-                if (tempoCounter <= tempoCooldown - tempoDuration && (fps == baseFps || fps == baseFps*40)) {
+                if (tempoCounter <= tempoCooldown - tempoDuration && (fps == baseFps/3 || fps == baseFps*12)) {
                     fps = baseFps;
                 }
                 playerTimeSpeed = 2;
             }
             if (panel.keyHandler.spacePressed && tempoCounter <= 0) {
                 tempoCounter = tempoCooldown;
-                fps = baseFps;
+                fps = baseFps/3;
             }
         }
         if (tempo == "Gold") {

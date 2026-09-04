@@ -2,6 +2,7 @@ public class Projectile extends Collidable {
 
     boolean playerTeam = false;
     int lifetime;
+    int maxLifetime;
     int delay;
     int stun;
     boolean area = false;
@@ -17,6 +18,7 @@ public class Projectile extends Collidable {
         this.direction = direction;
         this.speed = speed;
         this.playerTeam = team;
+        this.maxLifetime = lifetime;
         this.lifetime = lifetime;
         this.health = health;
         this.delay = delay;
@@ -30,7 +32,7 @@ public class Projectile extends Collidable {
             return;
         }
         if (speed > 0 && (x == 0 || x == Main.panelWidth/Main.scale - width || y == 0 || y == Main.panelWidth/Main.scale - height)) {
-            if (id == "bulletbouncy") {
+            if (id == "bulletbouncy" || (id == "anchor" && Main.player.upgrades.contains("Swell"))) {
                 if (Math.random() < 0.5) {
                     direction += 3.14/2;
                 }
@@ -73,6 +75,9 @@ public class Projectile extends Collidable {
                         if (id == "anchor" && Main.player.upgrades.contains("Wind")) {
                             e.sinking += health/10;
                             e.health += health;
+                        }
+                        if (id == "anchor" && Main.player.upgrades.contains("Swell")) {
+                            e.health -= (maxLifetime - lifetime)/120;
                         }
                         if (e.health <= 0) {
                             Main.player.health = Math.min(Main.player.maxHealth, Main.player.health + e.sinking);

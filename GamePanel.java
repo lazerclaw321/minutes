@@ -138,7 +138,7 @@ public class GamePanel extends JPanel {
 
             for (Projectile p : Main.projectiles) {
                 g2.setColor(Color.RED);
-                if (p.delay > 0) {
+                if (p.delay > 0 && !p.playerTeam) {
                     drawScaledImage(g2, Main.scale, images.get("delay"), (int)p.x, (int)p.y, p.width, p.height);
                 }
                 else {

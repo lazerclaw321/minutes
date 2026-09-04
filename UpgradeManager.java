@@ -80,6 +80,10 @@ public class UpgradeManager {
         upgradeDescription.add("Anchor now deals 10 more damage, stuns for 2x the duration, and is larger.");
         upgradeTypes.add("Wind");
         upgradeDescription.add("Anchor now deals no damage, but applies 2x the sinking and has lowered cooldown");
+        upgradeTypes.add("Tidal");
+        upgradeDescription.add("Anchor shoots a small anchor with halved stats 20 frames after. Anchor now stuns you for a short time. Anchor's cooldown is reduced slightly.");
+        upgradeTypes.add("Swell");
+        upgradeDescription.add("Anchor now bounces off walls and deals more damage the longer it has been on the screen.");
 
         //drift
         upgradeTypes.add("Dolphin");

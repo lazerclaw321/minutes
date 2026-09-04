@@ -1,5 +1,5 @@
 public class WaveSpawner {
-    int wave = 5;
+    int wave = 0;
     public void nextWave() {
         wave++;
         Main.timeCounter = 0;
@@ -48,6 +48,7 @@ public class WaveSpawner {
                 Main.enemies.add(new Enemy(100, 100, 20, 20, 0.5, 450, "kira", 300));
                 break;
             case 9:
+                Main.rewinded = -1;
                 Main.enemies.add(new Enemy(100, 100, 30, 30, 0.5, 400, "miniboss", 200));
                 Main.enemies.add(new Enemy(100, 100, 15, 15, 0.5, 60, "archer", 200));
                 Main.enemies.add(new Enemy(100, 100, 35, 35, 0.6, 200, "basic", 250));

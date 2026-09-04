@@ -23,6 +23,7 @@ public class Player extends Collidable {
     int heavyDamage = 20;
     double heavySizeMult = 1.5;
     int heavyStun = 60;
+    int heavyLifetime = 200;
 
     int defenseDuration = 100;
     double defenseSpeedMult = 2;
@@ -136,6 +137,10 @@ public class Player extends Collidable {
             case "Wind":
                 heavyCooldown -= 300;
                 break;
+            case "Tidal":
+                heavyCooldown -= 100;
+            case "Swell":
+                heavyLifetime += 1000;
 
             //drift upgrades
             case "Dolphin":
@@ -187,7 +192,6 @@ public class Player extends Collidable {
         specialCounter--;        
 
         confusionTimer = Math.max(confusionTimer - 1, 0);
-        System.out.println(confusionTimer);
 
         if (health <= 0) {
             deathTimer--;
@@ -264,9 +268,21 @@ public class Player extends Collidable {
                     mousePosition.x, 
                     mousePosition.y
                 ), 
-                1, 200, heavyDamage, true, 0, heavyStun, "anchor"
+                1, heavyLifetime, heavyDamage, true, 0, heavyStun, "anchor"
             );
+            if (upgrades.contains("Tidal")) {
+                Projectile p2 = new Projectile(
+                    x, y, (int)(width * heavySizeMult/2), (int)(height * heavySizeMult/2), 
+                    pointTowards(
+                        mousePosition.x, 
+                        mousePosition.y
+                    ), 
+                    0.5, heavyLifetime/2, heavyDamage/2, true, 20, heavyStun/2, "anchor"
+                );
+                Main.projectiles.add(p2);
+            }
             Main.projectiles.add(p);
+            stun = 20;
         }
 
         //defense
@@ -288,7 +304,7 @@ public class Player extends Collidable {
                         mousePosition.x, 
                         mousePosition.y
                     ), 
-                    0.5, 100, heavyDamage/2, true, 0, heavyStun/2, "anchor"
+                    0.5, heavyLifetime/2, heavyDamage/2, true, 0, heavyStun/2, "anchor"
                 );
                 Main.projectiles.add(p);
             }
