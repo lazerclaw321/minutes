@@ -67,6 +67,9 @@ public class Player extends Collidable {
         p.defenseCounter = defenseCounter;
         p.heavyCounter = heavyCounter;
         p.specialCounter = specialCounter;
+        for (String upgrade : upgrades) {
+            p.upgrade(upgrade);
+        }
         return p;
     }
 
@@ -139,8 +142,11 @@ public class Player extends Collidable {
                 break;
             case "Tidal":
                 heavyCooldown -= 100;
+                break;
             case "Swell":
                 heavyLifetime += 1000;
+                heavyCooldown -= 100;
+                break;
 
             //drift upgrades
             case "Dolphin":
@@ -170,13 +176,9 @@ public class Player extends Collidable {
             case "Sailboat":
                 specialScaling += 6;
                 break;
-
-            //passives
-            case "Arctic":
-                //does nothing to buff abillities
-                break;
-            case "Atlantic":
-                break;
+        }
+        for (String s : upgrades) {
+            System.out.println(s);
         }
     }
 
@@ -323,7 +325,9 @@ public class Player extends Collidable {
             );
             Main.projectiles.add(p);
             p.moveInDirection(width, p.direction);
-            p.direction = 0;
+            if (!upgrades.contains("Speedboat")) {
+                p.direction = 0;
+            }
             stun += 20;
             if (upgrades.contains("Yacht")) {
                 defenseCounter = 0;

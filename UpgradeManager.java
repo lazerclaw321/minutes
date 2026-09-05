@@ -13,10 +13,21 @@ public class UpgradeManager {
     ArrayList<String> tempoTypes = new ArrayList<String>();
     ArrayList<String> tempoDescription = new ArrayList<String>();
 
+    ArrayList<String> difficultyTypes = new ArrayList<String>();
+    ArrayList<String> difficultyDescription = new ArrayList<String>();
+
     String[] choices = new String[3];
     String[] choiceDescription = new String[3];
 
     public void initialize() {
+        //difficulties
+        difficultyTypes.add("Hours");
+        difficultyDescription.add("All enemies and enemy projectiles move half speed and deal half damage. Enemy tempos are disabled.");
+        difficultyTypes.add("Minutes");
+        difficultyDescription.add("Normal gameplay.");
+        difficultyTypes.add("Seconds");
+        difficultyDescription.add("Named for how long you will last. All enemies deal double damage have double health and take halved stun.");
+
         //tempos
         //stop time
         tempoTypes.add("Halt");
@@ -83,7 +94,7 @@ public class UpgradeManager {
         upgradeTypes.add("Tidal");
         upgradeDescription.add("Anchor shoots a small anchor with halved stats 20 frames after. Anchor now stuns you for a short time. Anchor's cooldown is reduced slightly.");
         upgradeTypes.add("Swell");
-        upgradeDescription.add("Anchor now bounces off walls and deals more damage the longer it has been on the screen.");
+        upgradeDescription.add("Anchor now bounces off walls and deals more damage the longer it has been on the screen. Anchor lasts for twice as long and has reduced cooldown.");
 
         //drift
         upgradeTypes.add("Dolphin");
@@ -113,7 +124,7 @@ public class UpgradeManager {
     
     }
 
-    public void upgrade(boolean tempo) {
+    public void upgrade(boolean tempo, boolean difficulties) {
         Random random = new Random();
         Main.player.health = Math.min(Main.player.maxHealth, Main.player.health + Main.player.maxHealth/2);
         if (tempo) {
@@ -123,6 +134,12 @@ public class UpgradeManager {
                 choiceDescription[i] = tempoDescription.get(removing);
                 tempoTypes.remove(removing);
                 tempoDescription.remove(removing);
+            }
+        }
+        else if (difficulties) {
+            for (int i = 0; i < 3; i++) {
+                choices[i] = difficultyTypes.get(i);
+                choiceDescription[i] = difficultyDescription.get(i);
             }
         }
         else {
@@ -136,6 +153,7 @@ public class UpgradeManager {
         }
 
         System.out.println(choices[0] + " " + choices[1] + " " + choices[2]);
+        Main.panel.repaint();
         try {
             Thread.sleep(1000); 
         } catch (InterruptedException e) {
@@ -163,6 +181,17 @@ public class UpgradeManager {
                 Main.tempo = choices[2];
             }
         }
+        else if (difficulties) {
+            if (mousePosition.x <= Main.panelWidth/3) {
+                Main.difficulty = choices[0];
+            }
+            else if (mousePosition.x <= Main.panelWidth*2/3) {
+                Main.difficulty = choices[1];
+            }
+            else {
+                Main.difficulty = choices[2];
+            }
+        }
         else {
             if (mousePosition.x <= Main.panelWidth/3) {
                 Main.player.upgrade(choices[0]);
@@ -182,7 +211,6 @@ public class UpgradeManager {
                     Main.backup.upgrade(choices[2]);
                 }
             }
-            System.out.println(Main.player.upgrades.get(0));
         }
         Main.upgrading = false;
     }

@@ -31,7 +31,7 @@ public class WaveSpawner {
                 Main.enemies.add(new Enemy(100, 100, 30, 30, 0.5, 400, "miniboss", 200));
                 break;
             case 6:
-                Main.enemies.add(new Enemy(100, 100, 20, 20, 0.5, 400, "dio", 200));
+                Main.enemies.add(new Enemy(100, 100, 30, 30, 0.5, 400, "dio", 200));
                 break;
             case 7:
                 Main.enemies.add(new Enemy(100, 100, 15, 15, 0.5, 60, "archer", 200));
@@ -45,7 +45,7 @@ public class WaveSpawner {
                     Main.rewinded = 0;
                 }
                 Main.backup2 = Main.player.copy();
-                Main.enemies.add(new Enemy(100, 100, 20, 20, 0.5, 450, "kira", 300));
+                Main.enemies.add(new Enemy(100, 100, 30, 30, 0.5, 450, "kira", 300));
                 break;
             case 9:
                 Main.rewinded = -1;
@@ -58,7 +58,7 @@ public class WaveSpawner {
                 Main.enemies.add(new Enemy(100, 100, 20, 20, 0.5, 300, "doppio", 300));
                 break;
             case 11:
-                Main.enemies.add(new Enemy(100, 100, 20, 20, 0.5, 400, "whitesnake", 300));
+                Main.enemies.add(new Enemy(100, 100, 30, 30, 0.5, 400, "whitesnake", 300));
                 Main.upgrading = true;
                 break;
             }

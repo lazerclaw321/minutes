@@ -56,6 +56,9 @@ public class Enemy extends Collidable {
             targetY = Main.player.y;
         }
         stun = Math.max(stun - 1, 0);
+        if (Main.difficulty == "Seconds") {
+            stun = Math.max(stun - 1, 0);
+        }
 
         if (stun > 0) {
             return;
@@ -170,9 +173,9 @@ public class Enemy extends Collidable {
             else {
                 moveToPlayer = true;
                 speed = 0.5;
+                frame = "Idle";
             }
             if (counter <= 0) {
-                
                 if (distanceFrom(Main.player) <= width * 1.5) {
                     Projectile p = new Projectile(
                         x, y, (int)(width * 1.5), (int)(height * 1.5), 
@@ -219,6 +222,7 @@ public class Enemy extends Collidable {
                             }
                             Main.projectiles.add(p);
                             counter = cooldown;
+                            frame = "Laser";
                             stun = 75;
                         }
                     }
@@ -298,11 +302,8 @@ public class Enemy extends Collidable {
         if (type == "archer" && counter <= 0) {
             Projectile p = new Projectile(
                 Main.player.x - Main.player.width/2 - width * 2, Main.player.y - Main.player.width/2 - height * 2, width * 4, height * 4, 
-                pointTowards(
-                    targetX, 
-                    targetY
-                ), 
-                0, 30, 10, false, 130, 0, "bow"
+                0, 
+                0, 30, 10, false, 130, 0, "beam"
             );
             Main.projectiles.add(p);
             p.moveInDirection(width, p.direction);
@@ -454,6 +455,7 @@ public class Enemy extends Collidable {
             else {
                 speed = baseSpeed;
                 moveInDirection(speed, direction);
+                frame = "Idle";
             }
             if (counter <= 0) {
                 if (counter3 >= -2) {
@@ -481,6 +483,7 @@ public class Enemy extends Collidable {
                         counter = cooldown;
                         stun = 50;
                     }
+                    frame = "Attack";
                 }
                 else {
                     for (int i = 0; i < 4; i++) {
@@ -495,6 +498,7 @@ public class Enemy extends Collidable {
                         counter = cooldown;
                         stun = 100;
                     }
+                    frame = "Attack";
                 }
             }
         }
@@ -706,8 +710,8 @@ public class Enemy extends Collidable {
                 Main.baseFps++;
                 Main.fps++;
                 counter3 = 0;
+                System.out.println(Main.fps + " " + Main.enemyTimeSpeed);
             }
-            Main.enemyTimeSpeed = Math.max(1, Main.fps/240);
             if (Main.fps >= 3000) {
                 Main.fps = 9999;
             }
@@ -726,7 +730,14 @@ public class Enemy extends Collidable {
         this.type = type;
         this.cooldown = cooldown;
         this.stun = 100;
-
+        if (Main.difficulty == "Hours") {
+            this.speed = this.speed/2;
+            this.baseSpeed = this.baseSpeed/2;
+        }
+        if (Main.difficulty == "Seconds") {
+            this.maxHealth *= 2;
+            this.health *= 2;
+        }
         if (Main.player.upgrades.contains("Arctic")) {
             this.sinking = 1;
         }

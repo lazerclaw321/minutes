@@ -46,6 +46,11 @@ public class Main {
     static int enemyTimeSpeed = 1;
     static int playerTimeCounter = -1;
 
+    static long start;
+    static long end;
+
+    static String difficulty = "Minutes";
+
     public static void main(String[] args) {
 
         JFrame frame = new JFrame("Minutes");
@@ -61,22 +66,22 @@ public class Main {
         
         upgrades.initialize();
         upgrading = true;
-        upgrades.upgrade(true);
-        player.upgrade("Swell");
+        upgrades.upgrade(false, true);
+        upgrading = true;
+        upgrades.upgrade(true, false);
+        upgrading = true;
+        upgrades.upgrade(false, false);
+        upgrading = true;
+        upgrades.upgrade(false, false);
+        upgrading = true;
+        upgrades.upgrade(false, false);
         initiateTempo(tempo);
 
         while (true) {
+            start = System.nanoTime();
             timeCounter++;
             enemyTimeCounter++;
             playerTimeCounter++;
-            if ((!enemyStopTime || (tempo == "Halt" || tempo == "Star" || tempo == "Gold")) && fps <= 2000) {
-                try {
-                    Thread.sleep(1000/fps); 
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }
-            panel.repaint();
 
             if (enemies.size() == 0 && !upgrading) {
                 if (tempo == "Rail") {
@@ -85,7 +90,7 @@ public class Main {
                 waves.nextWave();
             }
             if (upgrading) {
-                upgrades.upgrade(false);
+                upgrades.upgrade(false, false);
                 continue;
             }
 
@@ -123,6 +128,13 @@ public class Main {
                     }
                 }
             }
+            end = System.nanoTime();
+            if ((!enemyStopTime || (tempo == "Halt" || tempo == "Star" || tempo == "Gold")) && fps <= 2000) {
+                while (end - start < 1000000000/fps) {
+                    end = System.nanoTime();
+                }
+            }
+            panel.repaint();
         }
     }
 

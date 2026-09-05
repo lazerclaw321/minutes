@@ -24,6 +24,9 @@ public class Projectile extends Collidable {
         this.delay = delay;
         this.stun = stun;
         this.id = id;
+        if (!this.playerTeam && Main.difficulty == "Hours") {
+            this.speed = this.speed/2;
+        }
     }
 
     public void runProjectile() {
@@ -31,16 +34,17 @@ public class Projectile extends Collidable {
         if (delay > 0) {
             return;
         }
-        if (speed > 0 && (x == 0 || x == Main.panelWidth/Main.scale - width || y == 0 || y == Main.panelWidth/Main.scale - height)) {
+        if (speed > 0) {
             if (id == "bulletbouncy" || (id == "anchor" && Main.player.upgrades.contains("Swell"))) {
-                if (Math.random() < 0.5) {
-                    direction += 3.14/2;
+                if (x == 0 || x == 0 || x == Main.panelWidth/Main.scale - width) {
+                    System.out.println(direction);
+                    direction = 3.14-direction;
                 }
-                else {
-                    direction -= 3.14/2;
+                else if (y == 0 || y == Main.panelWidth/Main.scale - height) {
+                    direction = -direction;
                 }
             }
-            else {
+            else if (y == 0 || y == Main.panelWidth/Main.scale - height || x == 0 || x == Main.panelWidth/Main.scale - width){
                 health = 0;
             }
         }
@@ -53,7 +57,7 @@ public class Projectile extends Collidable {
         if (playerTeam) {
             for (Enemy e : Main.enemies) {
                 if (collision(e) && !e.immune && !Main.noDamage) {
-                    if (e.type == "diavolo" && e.counter3 <= 0) {
+                    if (e.type == "diavolo" && e.counter3 <= 0 && Main.difficulty != "Hours") {
                         Main.noDamage = true;
                         e.counter3 = 480;
                         if (!(Main.tempo == "Omit" || Main.tempo == "Rule" || Main.tempo == "Seer")) {
@@ -77,7 +81,8 @@ public class Projectile extends Collidable {
                             e.health += health;
                         }
                         if (id == "anchor" && Main.player.upgrades.contains("Swell")) {
-                            e.health -= (maxLifetime - lifetime)/120;
+                            e.health -= (maxLifetime - lifetime)/40;
+                             e.sinking += (maxLifetime - lifetime)/400;
                         }
                         if (e.health <= 0) {
                             Main.player.health = Math.min(Main.player.maxHealth, Main.player.health + e.sinking);
@@ -94,7 +99,15 @@ public class Projectile extends Collidable {
                     Main.panel.keyHandler.spacePressed = true;
                 }
                 else {
-                    Main.player.health -= health;
+                    if (Main.difficulty == "Seconds") {
+                        Main.player.health -= health * 2;
+                    }
+                    else if (Main.difficulty == "Minutes") {
+                        Main.player.health -= health;
+                    }
+                    else {
+                        Main.player.health -= health/2;
+                    }
                     Main.player.stun += stun;
                     if (Main.rewinded == 0) {
                         int[] damage = {Main.timeCounter, health};
