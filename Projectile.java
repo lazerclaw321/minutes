@@ -57,7 +57,7 @@ public class Projectile extends Collidable {
         if (playerTeam) {
             for (Enemy e : Main.enemies) {
                 if (collision(e) && !e.immune && !Main.noDamage) {
-                    if (e.type == "diavolo" && e.counter3 <= 0 && Main.difficulty != "Hours") {
+                    if (e.type == "diavolo" && e.counter3 <= 0) {
                         Main.noDamage = true;
                         e.counter3 = 480;
                         if (!(Main.tempo == "Omit" || Main.tempo == "Rule" || Main.tempo == "Seer")) {

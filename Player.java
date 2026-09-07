@@ -1,8 +1,6 @@
 import java.awt.MouseInfo;
 import java.awt.Point;
-import java.awt.Window;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.SwingUtilities;
 

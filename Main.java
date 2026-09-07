@@ -46,6 +46,7 @@ public class Main {
     static int enemyTimeSpeed = 1;
     static int playerTimeCounter = -1;
 
+    //framerate variables
     static long start;
     static long end;
 
@@ -69,12 +70,6 @@ public class Main {
         upgrades.upgrade(false, true);
         upgrading = true;
         upgrades.upgrade(true, false);
-        upgrading = true;
-        upgrades.upgrade(false, false);
-        upgrading = true;
-        upgrades.upgrade(false, false);
-        upgrading = true;
-        upgrades.upgrade(false, false);
         initiateTempo(tempo);
 
         while (true) {

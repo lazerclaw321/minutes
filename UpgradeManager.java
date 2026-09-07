@@ -22,7 +22,7 @@ public class UpgradeManager {
     public void initialize() {
         //difficulties
         difficultyTypes.add("Hours");
-        difficultyDescription.add("All enemies and enemy projectiles move half speed and deal half damage. Enemy tempos are disabled.");
+        difficultyDescription.add("All enemies and enemy projectiles move half speed and deal half damage.");
         difficultyTypes.add("Minutes");
         difficultyDescription.add("Normal gameplay.");
         difficultyTypes.add("Seconds");
@@ -121,6 +121,8 @@ public class UpgradeManager {
         upgradeDescription.add("When sinking is applied, stun the enemy for 5 frames per sinking stack, up to 35 frames. Enemies spawn with one stack of sinking.");
         upgradeTypes.add("Atlantic");
         upgradeDescription.add("Enemies move slightly slower per stack of sinking, up to 0.05 pixels per frame.");
+        upgradeTypes.add("Pacific");
+        upgradeDescription.add("You and your melee attacks are two times larger.");
     
     }
 
