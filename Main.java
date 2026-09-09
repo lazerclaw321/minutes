@@ -191,7 +191,7 @@ public class Main {
             tempoDuration = 1;
         }
         if (tempo == "Null") {
-            tempoCooldown = baseFps;
+            tempoCooldown = 3*baseFps;
             tempoDuration = 1;
         }
         if (tempo == "Fade") {

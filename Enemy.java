@@ -167,6 +167,12 @@ public class Enemy extends Collidable {
             }
         }
         if (type == "dio") {
+            if (counter3 >= 6 && counter2 <= 0 && counter <= 0) {
+                stun = 480;
+                frame = "Stun";
+                counter3 = 0;
+                return;
+            }
             counter2--;
             if (counter2 >= 0) {
                 moveToPlayer = false;
@@ -179,6 +185,7 @@ public class Enemy extends Collidable {
                 frame = "Idle";
             }
             if (counter <= 0) {
+                counter3++;
                 if (distanceFrom(Main.player) <= width * 1.5) {
                     Projectile p = new Projectile(
                         x, y, (int)(width * 1.5), (int)(height * 1.5), 
@@ -230,12 +237,7 @@ public class Enemy extends Collidable {
                         }
                     }
                 }
-                counter3++;
-                if (counter3 >= 6 && counter2 <= 0) {
-                    stun = 480;
-                    frame = "Stun";
-                    counter3 = 0;
-                }
+                
             }
         }
         if (type == "dio2" && counter <= 0) {                       
@@ -398,6 +400,12 @@ public class Enemy extends Collidable {
                 Main.noDamage = false;
                 Main.fps = Main.baseFps;
             }
+            if (counter3 <= 0) {
+                frame = "Idle";
+            }
+            else {
+                frame = "IdleInactive";
+            }
             if (counter <= 0) {
                 if (distanceFrom(Main.player) <= width * 1.5) {
                     counter2++; 
@@ -407,10 +415,11 @@ public class Enemy extends Collidable {
                             targetX, 
                             targetY
                         ) + random.nextDouble() * 2 - 1, 
-                        0, 10, 5, false, 10, 0, "slash"
+                        0, 10, 5, false, 10, 0, "smash"
                     );
                     Main.projectiles.add(p);
                     p.moveInDirection(width, p.direction);
+                    p.direction = 0;
                     counter = cooldown/20;
                 }
                 else {
@@ -436,6 +445,13 @@ public class Enemy extends Collidable {
                                 counter = cooldown;
                             }
                         }
+                        stun = 50;
+                        if (counter3 <= 0) {
+                            frame = "Attack";
+                        }
+                        else {
+                            frame = "AttackInactive";
+                        }
                     }
                     else {
                         for (int j = -1; j < 2; j++) {
@@ -452,6 +468,12 @@ public class Enemy extends Collidable {
                             }
                         }
                         stun = 150;
+                        if (counter3 <= 0) {
+                            frame = "Attack";
+                        }
+                        else {
+                            frame = "AttackInactive";
+                        }
                     }
                 }
             }

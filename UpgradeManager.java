@@ -39,7 +39,7 @@ public class UpgradeManager {
 
         //speed up time
         tempoTypes.add("Rust");
-        tempoDescription.add("While you are not moving, time moves 40 times faster. While moving, time moves three times faster and your speed of time is doubled. Activate to make the game run normal speed.");
+        tempoDescription.add("While you are not moving, time moves 36 times faster. While moving, time moves three times faster and your speed of time is doubled. Activate to make the game run normal speed.");
         tempoTypes.add("Rush");
         tempoDescription.add("Doubles the speed of time for yourself and halves the speed of time for enemies for 1 second. Hold to use. Recharges after 10 seconds");
         tempoTypes.add("Zion");
@@ -73,7 +73,7 @@ public class UpgradeManager {
         tempoTypes.add("Wing");
         tempoDescription.add("Hold this abillity to percieve time four times slower and see in skipped time.");
         tempoTypes.add("Null");
-        tempoDescription.add("Skip the time of all attacks for 5 minutes, clearing them. Cooldown of 1 second.");
+        tempoDescription.add("Skip the time of all attacks for 5 minutes, clearing them. Cooldown of 3 second.");
 
         //upgrades
         //hook

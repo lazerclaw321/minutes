@@ -8,6 +8,7 @@ public class WaveSpawner {
             case 1:
                 //1 basic
                 Main.enemies.add(new Enemy(100, 100, 20, 20, 0.8, 40, "basic", 50));
+                Main.upgrading = true;
                 break;
             case 2:
                 //1 basic
@@ -25,7 +26,6 @@ public class WaveSpawner {
                 Main.enemies.add(new Enemy(200, 200, 20, 20, 0.2, 20, "ranged", 50));
                 //MEGA BASIC
                 Main.enemies.add(new Enemy(100, 100, 35, 35, 0.6, 200, "basic", 250));
-                Main.upgrading = true;
                 break;
             case 5:
                 Main.enemies.add(new Enemy(100, 100, 30, 30, 0.5, 400, "miniboss", 200));
@@ -59,7 +59,6 @@ public class WaveSpawner {
                 break;
             case 11:
                 Main.enemies.add(new Enemy(100, 100, 30, 30, 0.5, 400, "whitesnake", 300));
-                Main.upgrading = true;
                 break;
             }
 
