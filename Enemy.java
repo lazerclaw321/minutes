@@ -50,6 +50,9 @@ public class Enemy extends Collidable {
         if (Main.player.upgrades.contains("Atlantic")) {
             speed = Math.max(0.05, baseSpeed - 0.05 * sinking);
         }
+        if (Main.player.upgrades.contains("Indian") && Math.floor(Math.random() * 7 * Main.baseFps) == 1) {
+            sinking++;
+        } 
         counter--;
         if (Main.tempo != "Omit" || Main.tempoCounter <= Main.tempoCooldown - Main.tempoDuration) {
             targetX = Main.player.x;
@@ -230,6 +233,7 @@ public class Enemy extends Collidable {
                 counter3++;
                 if (counter3 >= 6 && counter2 <= 0) {
                     stun = 480;
+                    frame = "Stun";
                     counter3 = 0;
                 }
             }
@@ -316,18 +320,22 @@ public class Enemy extends Collidable {
             if (counter2 >= 0) {
                 moveInDirection(speed, targetPosition[0]);
                 speed = 200/40;
+                frame = "Attack";
             } 
             else {
                 speed = baseSpeed;
                 moveInDirection(speed, direction);
+                frame = "Idle";
                 //strafing
                 for (Projectile p : Main.projectiles) {
                     if (p.playerTeam) {
                         if (collision(p)) {
+                            frame = "Dodge";
                             moveInDirection(-speed, direction);
                         }
                         p.moveInDirection(p.speed * 10, p.direction);
                         if (collision(p)) {
+                            frame = "Dodge";
                             moveInDirection(6, p.direction + 3.14/2);
                         }
                         p.moveInDirection(p.speed * -10, p.direction);
@@ -346,8 +354,9 @@ public class Enemy extends Collidable {
                             2.5, 500, 5, false, 50, 0, "bullet"
                         ));
                         counter = cooldown;
-                        stun = 50;
+                        frame = "Attack";
                     }
+                    stun = 50;
                 }
                 else if (Math.random() > 0.5) {
                     targetPosition[0] = pointTowards(targetX, targetY);
@@ -365,6 +374,7 @@ public class Enemy extends Collidable {
                         counter = cooldown;
                         Main.projectiles.add(p);
                     }
+                    frame = "Attack";
                     stun = 50;
                 }
                 else {
@@ -377,6 +387,7 @@ public class Enemy extends Collidable {
                     p.moveInDirection(width, direction);
                     Main.projectiles.add(p);
                     counter = cooldown;
+                    frame = "Attack";
                     stun = 150;
                 }
             }

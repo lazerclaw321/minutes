@@ -180,10 +180,10 @@ public class GamePanel extends JPanel {
             else {
                 drawBar(g2, 1, Main.panelWidth / 10, Main.panelHeight * 8 / 9 + Main.panelHeight / 30, Main.panelWidth / 3, Main.panelHeight / 30, 1-(double)Main.tempoCounter/((double)Main.tempoCooldown - (double)Main.tempoDuration), Color.BLACK, Color.BLUE);
             }
-            drawBar(g2, 1, Main.panelWidth * 6 / 10, Main.panelHeight * 8 / 9 + Main.panelHeight / 30, Main.panelWidth / 30, Main.panelHeight / 30, (double)Main.player.basicCounter/(double)Main.player.basicCooldown, Color.BLACK, Color.BLUE);
-            drawBar(g2, 1, Main.panelWidth * 7 / 10, Main.panelHeight * 8 / 9 + Main.panelHeight / 30, Main.panelWidth / 30, Main.panelHeight / 30, (double)Main.player.heavyCounter/(double)Main.player.heavyCooldown, Color.BLACK, Color.BLUE);
-            drawBar(g2, 1, Main.panelWidth * 8 / 10, Main.panelHeight * 8 / 9 + Main.panelHeight / 30, Main.panelWidth / 30, Main.panelHeight / 30, (double)Main.player.defenseCounter/(double)Main.player.defenseCooldown, Color.BLACK, Color.BLUE);
-            drawBar(g2, 1, Main.panelWidth * 9 / 10, Main.panelHeight * 8 / 9 + Main.panelHeight / 30, Main.panelWidth / 30, Main.panelHeight / 30, (double)Main.player.specialCounter/(double)Main.player.specialCooldown, Color.BLACK, Color.BLUE);
+            drawBar(g2, 1, Main.panelWidth * 6 / 10, Main.panelHeight * 8 / 9 + Main.panelHeight / 30, Main.panelWidth / 30, Main.panelHeight / 30, (double)Main.player.attackCounters.get(0)[1]/(double)Main.player.attackCounters.get(0)[0], Color.BLACK, Color.BLUE);
+            drawBar(g2, 1, Main.panelWidth * 7 / 10, Main.panelHeight * 8 / 9 + Main.panelHeight / 30, Main.panelWidth / 30, Main.panelHeight / 30, (double)Main.player.attackCounters.get(1)[1]/(double)Main.player.attackCounters.get(1)[0], Color.BLACK, Color.BLUE);
+            drawBar(g2, 1, Main.panelWidth * 8 / 10, Main.panelHeight * 8 / 9 + Main.panelHeight / 30, Main.panelWidth / 30, Main.panelHeight / 30, (double)Main.player.attackCounters.get(2)[1]/(double)Main.player.attackCounters.get(2)[0], Color.BLACK, Color.BLUE);
+            drawBar(g2, 1, Main.panelWidth * 9 / 10, Main.panelHeight * 8 / 9 + Main.panelHeight / 30, Main.panelWidth / 30, Main.panelHeight / 30, (double)Main.player.attackCounters.get(3)[1]/(double)Main.player.attackCounters.get(3)[0], Color.BLACK, Color.BLUE);
             drawCenteredString(g2, "M1", new Rectangle(Main.panelWidth * 13 / 20, Main.panelHeight * 8 / 9 + Main.panelHeight / 30, 1, 1), upgradeFont);
             drawCenteredString(g2, "M2", new Rectangle(Main.panelWidth * 15 / 20, Main.panelHeight * 8 / 9 + Main.panelHeight / 30, 1, 1), upgradeFont);
             drawCenteredString(g2, "↑", new Rectangle(Main.panelWidth * 17 / 20, Main.panelHeight * 8 / 9 + Main.panelHeight / 30, 1, 1), upgradeFont);

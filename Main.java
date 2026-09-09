@@ -326,11 +326,6 @@ public class Main {
                 tempoCounter = tempoCooldown;
                 backup = player;
                 player = player.copy();
-                player.health = 100;
-                player.basicCounter = 0;
-                player.heavyCounter = 0;
-                player.defenseCounter = 0;
-                player.specialCounter = 0;
             }
             if (tempoCounter <= tempoCooldown - tempoDuration) {
                 if (backup != null) {

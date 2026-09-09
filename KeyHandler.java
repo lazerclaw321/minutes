@@ -3,13 +3,7 @@ import java.awt.event.KeyEvent;
 
 public class KeyHandler implements KeyListener {
 
-    boolean wPressed;
-    boolean aPressed;
-    boolean sPressed;
-    boolean dPressed;
-    boolean shiftPressed;
-    boolean spacePressed;
-    boolean qPressed;
+    boolean wPressed, aPressed, sPressed, dPressed, shiftPressed, spacePressed, qPressed, ePressed, rPressed, tPressed, fPressed;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -40,6 +34,18 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_Q) {
             qPressed = true;
         }
+        if (code == KeyEvent.VK_E) {
+            ePressed = true;
+        }
+        if (code == KeyEvent.VK_R) {
+            rPressed = true;
+        }
+        if (code == KeyEvent.VK_T) {
+            tPressed = true;
+        }
+        if (code == KeyEvent.VK_F) {
+            fPressed = true;
+        }
     }
 
     @Override
@@ -65,6 +71,18 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_Q) {
             qPressed = false;
+        }
+        if (code == KeyEvent.VK_E) {
+            ePressed = false;
+        }
+        if (code == KeyEvent.VK_R) {
+            rPressed = false;
+        }
+        if (code == KeyEvent.VK_T) {
+            tPressed = false;
+        }
+        if (code == KeyEvent.VK_F) {
+            fPressed = false;
         }
     }
 }

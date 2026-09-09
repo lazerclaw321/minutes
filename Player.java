@@ -8,10 +8,14 @@ public class Player extends Collidable {
     
     String host = "Sailor";
 
-    int basicCooldown = 50;
-    int heavyCooldown = 800;
-    int defenseCooldown = 600;
-    int specialCooldown = 1000;
+    int stun;
+    final int maxHealth = 100;
+    String frame = "Idle";
+    ArrayList<String> upgrades = new ArrayList<String>();
+    int deathTimer = 240;
+
+    ArrayList<String> attacks = new ArrayList<String>();
+    ArrayList<int[]> attackCounters = new ArrayList<int[]>();
 
     int basicDamage = 10;
     int basicStagger = 20;
@@ -29,25 +33,11 @@ public class Player extends Collidable {
     int specialScaling = 6;
     int specialSpeed = 0;
     int specialLifetime = 30;
-    
-    int basicCounter = 0;
-    int heavyCounter = 0;
-    int defenseCounter = 0;
-    int specialCounter = 0;
 
     int figure8Counter = 0;
 
-    int stun;
-    final int maxHealth = 100;
-
     int defenseTimer = -1;
     boolean immune = false;
-
-    String frame = "Idle";
-
-    ArrayList<String> upgrades = new ArrayList<String>();
-
-    int deathTimer = 240;
 
     int confusionTimer = 0;
 
@@ -55,20 +45,31 @@ public class Player extends Collidable {
         this.health = health;
         this.speed = speed;
         this.baseSpeed = speed;
+        initializeAttacks();
     }
 
     public Player copy() {
         Player p = new Player(health, baseSpeed);
         p.x = x;
         p.y = y;
-        p.basicCounter = basicCounter;
-        p.defenseCounter = defenseCounter;
-        p.heavyCounter = heavyCounter;
-        p.specialCounter = specialCounter;
         for (String upgrade : upgrades) {
             p.upgrade(upgrade);
         }
         return p;
+    }
+
+    public void initializeAttacks() {
+        attacks.add("Basic");
+        attacks.add("Heavy");
+        attacks.add("Defense");
+        attacks.add("Special");
+        for (int i = 0; i < 4; i++) {
+            attackCounters.add(new int[2]);
+        }
+        attackCounters.get(0)[0] = 50;
+        attackCounters.get(1)[0] = 800;
+        attackCounters.get(2)[0] = 600;
+        attackCounters.get(3)[0] = 1000;
     }
 
     public void move(boolean w, boolean a, boolean s, boolean d) {
@@ -119,7 +120,7 @@ public class Player extends Collidable {
                 basicDamage += 2;
                 break;
             case "Figure 8":
-                basicCooldown -= 10;
+                attackCounters.get(0)[0] -= 10;
                 break;
             case "Bowline":
                 basicDamage += 10;
@@ -136,14 +137,14 @@ public class Player extends Collidable {
                 heavySizeMult += 1;
                 break;
             case "Wind":
-                heavyCooldown -= 300;
+                attackCounters.get(1)[0] -= 300;
                 break;
             case "Tidal":
-                heavyCooldown -= 100;
+                attackCounters.get(1)[0] -= 100;
                 break;
             case "Swell":
                 heavyLifetime += 1000;
-                heavyCooldown -= 100;
+                attackCounters.get(1)[0] -= 100;
                 break;
 
             //drift upgrades
@@ -152,10 +153,10 @@ public class Player extends Collidable {
                 defenseDuration += 100;
                 break;
             case "Salmon":
-                defenseCooldown -= 50;
+                attackCounters.get(2)[0] -= 50;
                 break;
             case "Sardine":
-                defenseCooldown -= 200;
+                attackCounters.get(2)[0] -= 200;
                 break;
 
             //slam upgrades
@@ -166,13 +167,21 @@ public class Player extends Collidable {
             case "Speedboat":
                 specialSpeed += 4;
                 specialLifetime += 60;
-                specialCooldown -= 200;
+                attackCounters.get(3)[0] -= 200;
                 break;
             case "Yacht":
                 specialScaling += 2;
                 break;
             case "Sailboat":
                 specialScaling += 6;
+                break;
+
+            //passives
+            case "Pacific":
+                width += 10;
+                height += 10;
+                basicSize += 10;
+                speed += 0.5;
                 break;
         }
         for (String s : upgrades) {
@@ -181,15 +190,11 @@ public class Player extends Collidable {
     }
 
     public void runPlayer() {
-        Point mousePosition = MouseInfo.getPointerInfo().getLocation();
-        SwingUtilities.convertPointFromScreen(mousePosition, Main.panel);
-        mousePosition.x = (int)(mousePosition.x/Main.scale);
-        mousePosition.y = (int)(mousePosition.y/Main.scale);
+        
 
-        basicCounter--;
-        heavyCounter--;
-        defenseCounter--;
-        specialCounter--;        
+        for (int[] attackStats : attackCounters) {
+            attackStats[1]--;
+        }
 
         confusionTimer = Math.max(confusionTimer - 1, 0);
 
@@ -200,6 +205,12 @@ public class Player extends Collidable {
             System.exit(0);
         }
         if (deathTimer < 240) {
+            if (Main.tempo == "Fade") {
+                frame = "FadeDeath";
+            }
+            else {
+                frame = "Death" + Integer.toString(5-(int)((deathTimer - 1.0)/48.0));
+            }
             return;
         }
         
@@ -226,8 +237,33 @@ public class Player extends Collidable {
         move(Main.panel.keyHandler.wPressed, Main.panel.keyHandler.aPressed, Main.panel.keyHandler.sPressed, Main.panel.keyHandler.dPressed);
 
         //basic
-        if (Main.panel.mouseHandler.leftClick && basicCounter <= 0) {
-            basicCounter = basicCooldown; 
+        if (Main.panel.mouseHandler.leftClick && attackCounters.get(0)[1] <= 0) {
+            useMove("Basic");
+        }
+
+        //heavy
+        if (Main.panel.mouseHandler.rightClick && attackCounters.get(1)[1] <= 0) {
+            useMove("Heavy");
+        }
+
+        //defense
+        if (Main.panel.keyHandler.shiftPressed && attackCounters.get(2)[1] <= 0) {
+            useMove("Defense");
+        }
+
+        //special
+        if (Main.panel.keyHandler.qPressed && attackCounters.get(3)[1] <= 0) {
+            useMove("Special");
+        }        
+    }
+
+    public void useMove(String type) {
+        Point mousePosition = MouseInfo.getPointerInfo().getLocation();
+        SwingUtilities.convertPointFromScreen(mousePosition, Main.panel);
+        mousePosition.x = (int)(mousePosition.x/Main.scale);
+        mousePosition.y = (int)(mousePosition.y/Main.scale);
+        if (type == "Basic") {
+            attackCounters.get(0)[1] = attackCounters.get(0)[0]; 
             figure8Counter += 1;
             Projectile p = null;
             if (figure8Counter >= 8 && upgrades.contains("Figure 8")) {
@@ -258,10 +294,8 @@ public class Player extends Collidable {
             p.moveInDirection(p.width, p.direction);
             stun += basicStagger;
         }
-
-        //heavy
-        if (Main.panel.mouseHandler.rightClick && heavyCounter <= 0) {
-            heavyCounter = heavyCooldown; 
+        else if (type == "Heavy") {
+            attackCounters.get(1)[1] = attackCounters.get(1)[0]; 
             Projectile p = new Projectile(
                 x, y, (int)(width * heavySizeMult), (int)(height * heavySizeMult), 
                 pointTowards(
@@ -284,15 +318,13 @@ public class Player extends Collidable {
             Main.projectiles.add(p);
             stun = 20;
         }
-
-        //defense
-        if (Main.panel.keyHandler.shiftPressed && defenseCounter <= 0) {
-            defenseCounter = defenseCooldown; 
+        else if (type == "Defense") {
+            attackCounters.get(2)[1] = attackCounters.get(2)[0]; 
             immune = true;
             speed = speed * defenseSpeedMult;
             defenseTimer = defenseDuration;
             if (upgrades.contains("Salmon")) {
-                heavyCounter = 0;
+                attackCounters.get(2)[1] = 0; 
             }
             if (upgrades.contains("Sardine")) {
                 health = Math.min(maxHealth, health + 3);
@@ -309,10 +341,8 @@ public class Player extends Collidable {
                 Main.projectiles.add(p);
             }
         }
-
-        //special
-        if (Main.panel.keyHandler.qPressed && specialCounter <= 0) {
-            specialCounter = specialCooldown; 
+        else if (type == "Special") {
+            attackCounters.get(3)[1] = attackCounters.get(3)[0]; ; 
             Projectile p = new Projectile(
                 x, y, width * 2, height * 2, 
                 pointTowards(
@@ -328,8 +358,9 @@ public class Player extends Collidable {
             }
             stun += 20;
             if (upgrades.contains("Yacht")) {
-                defenseCounter = 0;
+                attackCounters.get(2)[1] = 0;
             }
-        }        
+        }
     }
+
 }

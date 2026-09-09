@@ -110,7 +110,7 @@ public class UpgradeManager {
         upgradeTypes.add("Trawler");
         upgradeDescription.add("Slam deals 4 more damage per stack of sinking. Slam lasts a lot longer on the field.");
         upgradeTypes.add("Speedboat");
-        upgradeDescription.add("Slam is now a slow moving projectile. Slam lasts 3x longer. The cooldown of slam is decreased.");
+        upgradeDescription.add("Slam is now a projectile. Slam lasts 3x longer. The cooldown of slam is decreased.");
         upgradeTypes.add("Yacht");
         upgradeDescription.add("Slam deals 2 more damage per stack of sinking. Slam puts Drift off cooldown.");
         upgradeTypes.add("Sailboat");
@@ -122,7 +122,9 @@ public class UpgradeManager {
         upgradeTypes.add("Atlantic");
         upgradeDescription.add("Enemies move slightly slower per stack of sinking, up to 0.05 pixels per frame.");
         upgradeTypes.add("Pacific");
-        upgradeDescription.add("You and your melee attacks are two times larger.");
+        upgradeDescription.add("You and your melee attacks are bigger. You walk faster");
+        upgradeTypes.add("Indian");
+        upgradeDescription.add("Sinking is applied to each enemy randomly, on average once every seven seconds.");
     
     }
 
