@@ -74,6 +74,9 @@ public class Projectile extends Collidable {
                         if (id == "sailorSlam") {
                             e.health -= e.sinking * health - health;
                             Main.player.health = Math.min(Main.player.maxHealth, Main.player.health + e.sinking * 2);
+                            if (Main.player.attacks.contains("Cannon")) {
+                                Main.player.attackCounters.get(Main.player.attacks.indexOf("Cannon"))[1] -= Main.player.attackCounters.get(Main.player.attacks.indexOf("Cannon"))[0]/20 * e.sinking;
+                            }
                             e.sinking = 0;
                         }
                         if (id == "anchor" && Main.player.upgrades.contains("Wind")) {
@@ -120,6 +123,11 @@ public class Projectile extends Collidable {
                     health = 0;
                     System.out.println("HIT" + Main.player.health);
                 }
+            }
+        }
+        if (health == 0 && id == "grapple") {
+            for (int i = 0; i < 200; i++) {
+                Main.player.moveInDirection(1, Main.player.pointTowards(x, y));
             }
         }
     }

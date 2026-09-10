@@ -116,6 +116,13 @@ public class UpgradeManager {
         upgradeTypes.add("Sailboat");
         upgradeDescription.add("Slam deals 6 more damage per stack of sinking.");
 
+        //moves
+        upgradeTypes.add("Grapple");
+        upgradeDescription.add("Use to shoot a projectile that deals 10 damage (scales off hook damage and size and anchor lifetime and stun). When hitting an enemy or the edge of the map, it teleports you there.");
+        upgradeTypes.add("Cannon");
+        upgradeDescription.add("Every stack of sinking consumed by slam decreases this cooldown by 1/20. Use to shoot a projectile that deals 80 damage (scales off anchor stats)");
+
+
         //misc
         upgradeTypes.add("Arctic");
         upgradeDescription.add("When sinking is applied, stun the enemy for 5 frames per sinking stack, up to 35 frames. Enemies spawn with one stack of sinking.");

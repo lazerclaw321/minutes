@@ -72,6 +72,7 @@ public class Main {
         upgrades.upgrade(true, false);
         initiateTempo(tempo);
 
+
         while (true) {
             start = System.nanoTime();
             timeCounter++;

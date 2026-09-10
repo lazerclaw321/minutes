@@ -66,10 +66,10 @@ public class Player extends Collidable {
         for (int i = 0; i < 4; i++) {
             attackCounters.add(new int[2]);
         }
-        attackCounters.get(0)[0] = 50;
-        attackCounters.get(1)[0] = 800;
-        attackCounters.get(2)[0] = 600;
-        attackCounters.get(3)[0] = 1000;
+        attackCounters.get(3)[0] = 50;
+        attackCounters.get(2)[0] = 800;
+        attackCounters.get(1)[0] = 600;
+        attackCounters.get(0)[0] = 1000;
     }
 
     public void move(boolean w, boolean a, boolean s, boolean d) {
@@ -120,7 +120,7 @@ public class Player extends Collidable {
                 basicDamage += 2;
                 break;
             case "Figure 8":
-                attackCounters.get(0)[0] -= 10;
+                attackCounters.get(3)[0] -= 10;
                 break;
             case "Bowline":
                 basicDamage += 10;
@@ -137,14 +137,14 @@ public class Player extends Collidable {
                 heavySizeMult += 1;
                 break;
             case "Wind":
-                attackCounters.get(1)[0] -= 300;
+                attackCounters.get(2)[0] -= 300;
                 break;
             case "Tidal":
-                attackCounters.get(1)[0] -= 100;
+                attackCounters.get(2)[0] -= 100;
                 break;
             case "Swell":
                 heavyLifetime += 1000;
-                attackCounters.get(1)[0] -= 100;
+                attackCounters.get(2)[0] -= 100;
                 break;
 
             //drift upgrades
@@ -153,10 +153,10 @@ public class Player extends Collidable {
                 defenseDuration += 100;
                 break;
             case "Salmon":
-                attackCounters.get(2)[0] -= 50;
+                attackCounters.get(1)[0] -= 50;
                 break;
             case "Sardine":
-                attackCounters.get(2)[0] -= 200;
+                attackCounters.get(1)[0] -= 200;
                 break;
 
             //slam upgrades
@@ -167,7 +167,7 @@ public class Player extends Collidable {
             case "Speedboat":
                 specialSpeed += 4;
                 specialLifetime += 60;
-                attackCounters.get(3)[0] -= 200;
+                attackCounters.get(0)[0] -= 200;
                 break;
             case "Yacht":
                 specialScaling += 2;
@@ -183,6 +183,17 @@ public class Player extends Collidable {
                 basicSize += 10;
                 speed += 0.5;
                 break;
+
+            //moves
+            case "Grapple":
+                attacks.add("Grapple");
+                int[] grappleStats = {300, 0};
+                attackCounters.add(grappleStats);
+                break;
+            case "Cannon":
+                attacks.add("Cannon");
+                int[] cannonStats = {1000000, 0};
+                attackCounters.add(cannonStats);
         }
         for (String s : upgrades) {
             System.out.println(s);
@@ -237,24 +248,48 @@ public class Player extends Collidable {
         move(Main.panel.keyHandler.wPressed, Main.panel.keyHandler.aPressed, Main.panel.keyHandler.sPressed, Main.panel.keyHandler.dPressed);
 
         //basic
-        if (Main.panel.mouseHandler.leftClick && attackCounters.get(0)[1] <= 0) {
+        if (Main.panel.mouseHandler.leftClick && attackCounters.get(3)[1] <= 0) {
             useMove("Basic");
+            attackCounters.get(3)[1] = attackCounters.get(3)[0]; 
         }
 
         //heavy
-        if (Main.panel.mouseHandler.rightClick && attackCounters.get(1)[1] <= 0) {
+        if (Main.panel.mouseHandler.rightClick && attackCounters.get(2)[1] <= 0) {
             useMove("Heavy");
+            attackCounters.get(2)[1] = attackCounters.get(2)[0]; 
         }
 
         //defense
-        if (Main.panel.keyHandler.shiftPressed && attackCounters.get(2)[1] <= 0) {
+        if (Main.panel.keyHandler.shiftPressed && attackCounters.get(1)[1] <= 0) {
             useMove("Defense");
+            attackCounters.get(1)[1] = attackCounters.get(1)[0]; 
         }
 
         //special
-        if (Main.panel.keyHandler.qPressed && attackCounters.get(3)[1] <= 0) {
+        if (Main.panel.keyHandler.qPressed && attackCounters.get(0)[1] <= 0) {
             useMove("Special");
-        }        
+            attackCounters.get(0)[1] = attackCounters.get(0)[0];
+        }      
+        
+        if (attacks.size() >= 5) {
+            if (Main.panel.keyHandler.ePressed && attackCounters.get(4)[1] <= 0) {
+                useMove(attacks.get(4));
+                attackCounters.get(4)[1] = attackCounters.get(4)[0];
+            }
+        }
+        if (attacks.size() >= 6) {
+            if (Main.panel.keyHandler.rPressed && attackCounters.get(5)[1] <= 0) {
+                useMove(attacks.get(5));
+                attackCounters.get(5)[1] = attackCounters.get(5)[0];
+            }
+        }
+        if (attacks.size() >= 7) {
+            if (Main.panel.keyHandler.tPressed && attackCounters.get(6)[1] <= 0) {
+                useMove(attacks.get(6));
+                attackCounters.get(6)[1] = attackCounters.get(6)[0];
+            }
+        }
+           
     }
 
     public void useMove(String type) {
@@ -263,7 +298,6 @@ public class Player extends Collidable {
         mousePosition.x = (int)(mousePosition.x/Main.scale);
         mousePosition.y = (int)(mousePosition.y/Main.scale);
         if (type == "Basic") {
-            attackCounters.get(0)[1] = attackCounters.get(0)[0]; 
             figure8Counter += 1;
             Projectile p = null;
             if (figure8Counter >= 8 && upgrades.contains("Figure 8")) {
@@ -294,8 +328,7 @@ public class Player extends Collidable {
             p.moveInDirection(p.width, p.direction);
             stun += basicStagger;
         }
-        else if (type == "Heavy") {
-            attackCounters.get(1)[1] = attackCounters.get(1)[0]; 
+        else if (type == "Heavy") {    
             Projectile p = new Projectile(
                 x, y, (int)(width * heavySizeMult), (int)(height * heavySizeMult), 
                 pointTowards(
@@ -319,12 +352,11 @@ public class Player extends Collidable {
             stun = 20;
         }
         else if (type == "Defense") {
-            attackCounters.get(2)[1] = attackCounters.get(2)[0]; 
             immune = true;
             speed = speed * defenseSpeedMult;
             defenseTimer = defenseDuration;
             if (upgrades.contains("Salmon")) {
-                attackCounters.get(2)[1] = 0; 
+                attackCounters.get(1)[1] = 0; 
             }
             if (upgrades.contains("Sardine")) {
                 health = Math.min(maxHealth, health + 3);
@@ -342,7 +374,6 @@ public class Player extends Collidable {
             }
         }
         else if (type == "Special") {
-            attackCounters.get(3)[1] = attackCounters.get(3)[0]; ; 
             Projectile p = new Projectile(
                 x, y, width * 2, height * 2, 
                 pointTowards(
@@ -358,8 +389,30 @@ public class Player extends Collidable {
             }
             stun += 20;
             if (upgrades.contains("Yacht")) {
-                attackCounters.get(2)[1] = 0;
+                attackCounters.get(1)[1] = 0;
             }
+        }
+        else if (type == "Grapple") {
+            Projectile p = new Projectile(
+                x, y, basicSize, basicSize, 
+                pointTowards(
+                    mousePosition.x, 
+                    mousePosition.y
+                ), 
+                4, heavyLifetime, basicDamage, true, 0, heavyStun, "grapple"
+            );
+            Main.projectiles.add(p);
+        }
+        else if (type == "Cannon") {
+            Projectile p = new Projectile(
+                x, y, (int)(width * heavySizeMult), (int)(height * heavySizeMult), 
+                pointTowards(
+                    mousePosition.x, 
+                    mousePosition.y
+                ), 
+                1, heavyLifetime, heavyDamage * 4, true, 0, heavyStun, "cannonball"
+            );
+            Main.projectiles.add(p);
         }
     }
 
