@@ -40,6 +40,7 @@ public class Player extends Collidable {
     boolean immune = false;
 
     int confusionTimer = 0;
+    int flintlockCounter = 0;
 
     public Player(int health, double speed) {
         this.health = health;
@@ -59,10 +60,12 @@ public class Player extends Collidable {
     }
 
     public void initializeAttacks() {
-        attacks.add("Basic");
-        attacks.add("Heavy");
-        attacks.add("Defense");
+        
         attacks.add("Special");
+        attacks.add("Defense");
+        attacks.add("Heavy");
+        attacks.add("Basic");
+        
         for (int i = 0; i < 4; i++) {
             attackCounters.add(new int[2]);
         }
@@ -194,6 +197,18 @@ public class Player extends Collidable {
                 attacks.add("Cannon");
                 int[] cannonStats = {1000000, 0};
                 attackCounters.add(cannonStats);
+                break;
+            case "Cutlass":
+                attacks.add("Cutlass");
+                int[] cutlassStats = {1000000, 0};
+                attackCounters.add(cutlassStats);
+                break;
+            case "Flintlock":
+                attacks.set(2, "Flintlock");
+                int[] flintlockStats = {Main.baseFps/2, 0};
+                attackCounters.set(2, flintlockStats);
+                heavyLifetime += 400;
+                break;
         }
         for (String s : upgrades) {
             System.out.println(s);
@@ -249,25 +264,25 @@ public class Player extends Collidable {
 
         //basic
         if (Main.panel.mouseHandler.leftClick && attackCounters.get(3)[1] <= 0) {
-            useMove("Basic");
+            useMove(attacks.get(3));
             attackCounters.get(3)[1] = attackCounters.get(3)[0]; 
         }
 
         //heavy
         if (Main.panel.mouseHandler.rightClick && attackCounters.get(2)[1] <= 0) {
-            useMove("Heavy");
+            useMove(attacks.get(2));
             attackCounters.get(2)[1] = attackCounters.get(2)[0]; 
         }
 
         //defense
         if (Main.panel.keyHandler.shiftPressed && attackCounters.get(1)[1] <= 0) {
-            useMove("Defense");
+            useMove(attacks.get(1));
             attackCounters.get(1)[1] = attackCounters.get(1)[0]; 
         }
 
         //special
         if (Main.panel.keyHandler.qPressed && attackCounters.get(0)[1] <= 0) {
-            useMove("Special");
+            useMove(attacks.get(0));
             attackCounters.get(0)[1] = attackCounters.get(0)[0];
         }      
         
@@ -413,6 +428,44 @@ public class Player extends Collidable {
                 1, heavyLifetime, heavyDamage * 4, true, 0, heavyStun, "cannonball"
             );
             Main.projectiles.add(p);
+        }
+        else if (type == "Cutlass") {
+            Projectile p = new Projectile(
+                x, y, basicSize*2, basicSize*2, 
+                pointTowards(
+                    mousePosition.x, 
+                    mousePosition.y
+                ), 
+                0, 30, basicDamage*4, true, 10, basicStun, "cutlassSlash"
+            );
+            Main.projectiles.add(p);
+            p.moveInDirection(p.width, p.direction);
+            stun += basicStagger;
+        }
+        else if (type == "Flintlock" && flintlockCounter >= 1) {    
+            Projectile p = new Projectile(
+                x, y, (int)(width * heavySizeMult/2), (int)(height * heavySizeMult/2), 
+                pointTowards(
+                    mousePosition.x, 
+                    mousePosition.y
+                ), 
+                2, heavyLifetime/2, heavyDamage/2, true, 20, heavyStun/2, "bullet"
+            );
+            if (upgrades.contains("Tidal")) {
+                Projectile p2 = new Projectile(
+                    x, y, (int)(width * heavySizeMult/4), (int)(height * heavySizeMult/4), 
+                    pointTowards(
+                        mousePosition.x, 
+                        mousePosition.y
+                    ), 
+                    1, heavyLifetime/4, heavyDamage/4, true, 20, heavyStun/4, "bullet"
+                );
+                Main.projectiles.add(p2);
+            }
+            Main.projectiles.add(p);
+            stun = 20;
+            flintlockCounter--;
+            Main.panel.attackKeys[2] = Integer.toString(Main.player.flintlockCounter);
         }
     }
 

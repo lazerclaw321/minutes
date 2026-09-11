@@ -121,7 +121,10 @@ public class UpgradeManager {
         upgradeDescription.add("Use to shoot a projectile that deals 10 damage (scales off hook damage and size and anchor lifetime and stun). When hitting an enemy or the edge of the map, it teleports you there.");
         upgradeTypes.add("Cannon");
         upgradeDescription.add("Every stack of sinking consumed by slam decreases this cooldown by 1/20. Use to shoot a projectile that deals 80 damage (scales off anchor stats)");
-
+        upgradeTypes.add("Cutlass");
+        upgradeDescription.add("Every hook landed decreases this cooldown by 1/8. Use to make a large slash that deals 40 damage and nullifies enemy projectiles that hit it (scales off hook stats)");
+        upgradeTypes.add("Flintlock");
+        upgradeDescription.add("Replace your anchor with a flintlock. When you land an M1, gain 1 shot. Has half of your anchor stats. Anchor lasts 3x longer and is 4x as fast.");
 
         //misc
         upgradeTypes.add("Arctic");

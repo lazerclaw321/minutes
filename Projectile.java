@@ -35,7 +35,7 @@ public class Projectile extends Collidable {
             return;
         }
         if (speed > 0) {
-            if (id == "bulletbouncy" || (id == "anchor" && Main.player.upgrades.contains("Swell"))) {
+            if (id == "bulletbouncy" || ((id == "anchor" || (id == "bullet" && playerTeam)) && Main.player.upgrades.contains("Swell"))) {
                 if (x == 0 || x == 0 || x == Main.panelWidth/Main.scale - width) {
                     System.out.println(direction);
                     direction = 3.14-direction;
@@ -52,6 +52,13 @@ public class Projectile extends Collidable {
         lifetime--;
         if (lifetime <= 0) {
             health = 0;
+        }
+        if (id == "cutlassSlash") {
+            for (Projectile p : Main.projectiles) {
+                if (p.playerTeam != playerTeam && collision(p)) {
+                    p.health = 0;
+                }
+            }
         }
 
         if (playerTeam) {
@@ -79,11 +86,18 @@ public class Projectile extends Collidable {
                             }
                             e.sinking = 0;
                         }
-                        if (id == "anchor" && Main.player.upgrades.contains("Wind")) {
+                        if (id == "slash" && Main.player.attacks.contains("Cutlass")) {
+                            Main.player.attackCounters.get(Main.player.attacks.indexOf("Cutlass"))[1] -= Main.player.attackCounters.get(Main.player.attacks.indexOf("Cutlass"))[0]/8;
+                        }
+                        if (id == "slash" && Main.player.attacks.contains("Flintlock")) {
+                            Main.player.flintlockCounter++;
+                            Main.panel.attackKeys[2] = Integer.toString(Main.player.flintlockCounter);
+                        }
+                        if ((id == "anchor" || id == "bullet") && Main.player.upgrades.contains("Wind")) {
                             e.sinking += health/10;
                             e.health += health;
                         }
-                        if (id == "anchor" && Main.player.upgrades.contains("Swell")) {
+                        if ((id == "anchor" || id == "bullet") && Main.player.upgrades.contains("Swell")) {
                             e.health -= (maxLifetime - lifetime)/40;
                              e.sinking += (maxLifetime - lifetime)/400;
                         }
