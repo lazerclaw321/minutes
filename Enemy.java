@@ -739,7 +739,7 @@ public class Enemy extends Collidable {
             }
 
             counter3++;
-            if (counter3 >= Main.fps/40) {
+            if (counter3 >= Main.fps/20) {
                 Main.baseFps++;
                 Main.fps++;
                 counter3 = 0;
