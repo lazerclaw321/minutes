@@ -60,19 +60,35 @@ public class Player extends Collidable {
     }
 
     public void initializeAttacks() {
-        
-        attacks.add("Special");
-        attacks.add("Defense");
-        attacks.add("Heavy");
-        attacks.add("Basic");
-        
-        for (int i = 0; i < 4; i++) {
-            attackCounters.add(new int[2]);
+        if (host == "Sailor") {
+            attacks.add("Slam");
+            attacks.add("Drift");
+            attacks.add("Anchor");
+            attacks.add("Hook");
+            
+            for (int i = 0; i < 4; i++) {
+                attackCounters.add(new int[2]);
+            }
+            attackCounters.get(3)[0] = 50;
+            attackCounters.get(2)[0] = 800;
+            attackCounters.get(1)[0] = 600;
+            attackCounters.get(0)[0] = 1000;
         }
-        attackCounters.get(3)[0] = 50;
-        attackCounters.get(2)[0] = 800;
-        attackCounters.get(1)[0] = 600;
-        attackCounters.get(0)[0] = 1000;
+        else if (host == "Brawler") {
+            attacks.add("Smash");
+            attacks.add("Block");
+            attacks.add("Charge");
+            attacks.add("Punch");
+            
+            for (int i = 0; i < 4; i++) {
+                attackCounters.add(new int[2]);
+            }
+            attackCounters.get(3)[0] = 25;
+            attackCounters.get(2)[0] = 1000000;
+            attackCounters.get(1)[0] = 300;
+            attackCounters.get(0)[0] = 1000000;
+        }
+        
     }
 
     public void move(boolean w, boolean a, boolean s, boolean d) {
@@ -216,7 +232,6 @@ public class Player extends Collidable {
     }
 
     public void runPlayer() {
-        
 
         for (int[] attackStats : attackCounters) {
             attackStats[1]--;
@@ -244,6 +259,7 @@ public class Player extends Collidable {
             stun--;
             return;
         }
+
         if (defenseTimer > 0) {
             defenseTimer--;
         }
@@ -263,48 +279,49 @@ public class Player extends Collidable {
         move(Main.panel.keyHandler.wPressed, Main.panel.keyHandler.aPressed, Main.panel.keyHandler.sPressed, Main.panel.keyHandler.dPressed);
 
         //basic
-        if (Main.panel.mouseHandler.leftClick && attackCounters.get(3)[1] <= 0) {
-            useMove(attacks.get(3));
-            attackCounters.get(3)[1] = attackCounters.get(3)[0]; 
+        if (Main.panel.mouseHandler.leftClick) {
+            checkMove(3);
         }
 
         //heavy
-        if (Main.panel.mouseHandler.rightClick && attackCounters.get(2)[1] <= 0) {
-            useMove(attacks.get(2));
-            attackCounters.get(2)[1] = attackCounters.get(2)[0]; 
+        if (Main.panel.mouseHandler.rightClick) {
+            checkMove(2); 
         }
 
         //defense
-        if (Main.panel.keyHandler.shiftPressed && attackCounters.get(1)[1] <= 0) {
-            useMove(attacks.get(1));
-            attackCounters.get(1)[1] = attackCounters.get(1)[0]; 
+        if (Main.panel.keyHandler.shiftPressed) {
+            checkMove(1);
         }
 
         //special
-        if (Main.panel.keyHandler.qPressed && attackCounters.get(0)[1] <= 0) {
-            useMove(attacks.get(0));
-            attackCounters.get(0)[1] = attackCounters.get(0)[0];
+        if (Main.panel.keyHandler.qPressed) {
+            checkMove(0);
         }      
         
+        //extra moves
         if (attacks.size() >= 5) {
-            if (Main.panel.keyHandler.ePressed && attackCounters.get(4)[1] <= 0) {
-                useMove(attacks.get(4));
-                attackCounters.get(4)[1] = attackCounters.get(4)[0];
+            if (Main.panel.keyHandler.ePressed) {
+                checkMove(4);
             }
         }
         if (attacks.size() >= 6) {
-            if (Main.panel.keyHandler.rPressed && attackCounters.get(5)[1] <= 0) {
-                useMove(attacks.get(5));
-                attackCounters.get(5)[1] = attackCounters.get(5)[0];
+            if (Main.panel.keyHandler.rPressed) {
+                checkMove(5);
             }
         }
         if (attacks.size() >= 7) {
-            if (Main.panel.keyHandler.tPressed && attackCounters.get(6)[1] <= 0) {
-                useMove(attacks.get(6));
-                attackCounters.get(6)[1] = attackCounters.get(6)[0];
+            if (Main.panel.keyHandler.tPressed) {
+                checkMove(6);
             }
         }
            
+    }
+
+    public void checkMove(int position) {
+        if (attackCounters.get(position)[1] <= 0) {
+            useMove(attacks.get(position));
+            attackCounters.get(position)[1] = attackCounters.get(position)[0];
+        }
     }
 
     public void useMove(String type) {
@@ -312,7 +329,8 @@ public class Player extends Collidable {
         SwingUtilities.convertPointFromScreen(mousePosition, Main.panel);
         mousePosition.x = (int)(mousePosition.x/Main.scale);
         mousePosition.y = (int)(mousePosition.y/Main.scale);
-        if (type == "Basic") {
+        //sailor
+        if (type == "Hook") {
             figure8Counter += 1;
             Projectile p = null;
             if (figure8Counter >= 8 && upgrades.contains("Figure 8")) {
@@ -343,7 +361,7 @@ public class Player extends Collidable {
             p.moveInDirection(p.width, p.direction);
             stun += basicStagger;
         }
-        else if (type == "Heavy") {    
+        else if (type == "Anchor") {    
             Projectile p = new Projectile(
                 x, y, (int)(width * heavySizeMult), (int)(height * heavySizeMult), 
                 pointTowards(
@@ -366,7 +384,7 @@ public class Player extends Collidable {
             Main.projectiles.add(p);
             stun = 20;
         }
-        else if (type == "Defense") {
+        else if (type == "Drift") {
             immune = true;
             speed = speed * defenseSpeedMult;
             defenseTimer = defenseDuration;
@@ -388,7 +406,7 @@ public class Player extends Collidable {
                 Main.projectiles.add(p);
             }
         }
-        else if (type == "Special") {
+        else if (type == "Slam") {
             Projectile p = new Projectile(
                 x, y, width * 2, height * 2, 
                 pointTowards(
@@ -467,6 +485,23 @@ public class Player extends Collidable {
             flintlockCounter--;
             Main.panel.attackKeys[2] = Integer.toString(Main.player.flintlockCounter);
         }
+        
+        //brawler
+        if (type == "Punch") {
+            Projectile p = new Projectile(
+                x, y, basicSize, basicSize, 
+                pointTowards(
+                    mousePosition.x, 
+                     mousePosition.y
+                 ), 
+                0, 30, basicDamage, true, 10, basicStun, "slash"
+            );
+
+            Main.projectiles.add(p);
+            p.moveInDirection(p.width, p.direction);
+            stun += basicStagger;
+        }
+    
     }
 
 }

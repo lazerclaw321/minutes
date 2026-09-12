@@ -85,21 +85,29 @@ public class Enemy extends Collidable {
             counter = cooldown;
             stun += 30;
         }
-        if (type == "ranged" && counter <= 0) {
+        if ((type == "ranged" || type == "snake")) {
             counter2 += 1;
-            Projectile p = new Projectile(
-                x, y, 10, 10, 
-                pointTowards(
-                    targetX, 
-                    targetY
-                ), 
-                2, 300, 10, false, 10, 0, "bullet"
-            );
-            Main.projectiles.add(p);
-            counter = cooldown;
-            if (counter2 == 6) {
-                stun = 150;
-                counter2 = 0;
+            frame = "Idle"; 
+            if (counter <= 0) {
+                Projectile p = new Projectile(
+                    x, y, 10, 10, 
+                    pointTowards(
+                        targetX, 
+                        targetY
+                    ), 
+                    2, 300, 10, false, 10, 0, "bullet"
+                );
+                Main.projectiles.add(p);
+                counter = cooldown;
+                stun = 10;
+                if (type == "snake") {
+                    frame = "Attack";
+                }
+                if (counter2 == 6) {
+                    stun = 150;
+                    frame = "Idle";
+                    counter2 = 0;
+                }
             }
         }
         if (type == "shotgunner" && counter <= 0 && distanceFrom(Main.player) <= 75) {
@@ -538,6 +546,7 @@ public class Enemy extends Collidable {
         if (type == "whitesnake") {
             moveToPlayer = false;
             counter2--;
+            frame = "Idle";
             if (counter2 >= 0) {
                 moveInDirection(speed, targetPosition[0]);
                 speed = 200/40;
@@ -574,11 +583,12 @@ public class Enemy extends Collidable {
                         Main.projectiles.add(p);
                         counter = cooldown;
                     }
+                    frame = "Attack";
                     stun = 120;
                 }
                 else if (Math.random() > 0.5) {
-                    Enemy ranged = new Enemy((int)(x - 50), (int)(y - 50), 15, 15, 0.2, 20, "ranged", 150);
-                    ranged.stun = 300;
+                    Enemy ranged = new Enemy((int)(x - 50), (int)(y - 50), 15, 15, 0.2, 20, "snake", 150);
+                    ranged.stun = 500;
                     Main.enemies.add(ranged);
                     Projectile p = new Projectile(
                         x, y, 10, 10, 
@@ -591,7 +601,8 @@ public class Enemy extends Collidable {
                     p.moveInDirection(15, p.direction);
                     Main.projectiles.add(p);
                     counter = cooldown;
-                    
+                    frame = "Attack";
+                    stun = 90;
                 }
                 else {
                     Projectile p = new Projectile(
@@ -601,6 +612,7 @@ public class Enemy extends Collidable {
                     );
                     Main.projectiles.add(p);
                     counter = cooldown;
+                    frame = "Attack";
                     stun = 150;
                 }
             }

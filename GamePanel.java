@@ -132,6 +132,7 @@ public class GamePanel extends JPanel {
                 setBackground(Color.WHITE);
             }
             if (Main.player != null) {
+                drawScaledImage(g2, Main.scale, images.get(Main.player.host + "Background"), 0, 0, 500, 500);
                 drawScaledImage(g2, Main.scale, images.get(Main.player.host + Main.player.frame), (int)Main.player.x, (int)Main.player.y, Main.player.width, Main.player.height);
                 if (Main.backup != null) {
                     drawScaledImage(g2, Main.scale, images.get(Main.backup.host + Main.backup.frame), (int)Main.backup.x, (int)Main.backup.y, Main.backup.width, Main.backup.height);
