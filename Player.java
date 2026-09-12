@@ -28,9 +28,9 @@ public class Player extends Collidable {
     int heavyLifetime = 200;
 
     int defenseDuration = 100;
-    double defenseSpeedMult = 2;
+    double defenseScaling = 2;
 
-    int specialScaling = 6;
+    int specialDamage = 6;
     int specialSpeed = 0;
     int specialLifetime = 30;
 
@@ -41,6 +41,7 @@ public class Player extends Collidable {
 
     int confusionTimer = 0;
     int flintlockCounter = 0;
+    int chargeCounter = 0;
 
     public Player(int health, double speed) {
         this.health = health;
@@ -73,6 +74,23 @@ public class Player extends Collidable {
             attackCounters.get(2)[0] = 800;
             attackCounters.get(1)[0] = 600;
             attackCounters.get(0)[0] = 1000;
+
+            basicDamage = 10;
+            basicStagger = 20;
+            basicSize = width;
+            basicStun = 0;
+
+            heavyDamage = 20;
+            heavySizeMult = 1.5;
+            heavyStun = 60;
+            heavyLifetime = 200;
+
+            defenseDuration = 100;
+            defenseScaling = 2;
+
+            specialDamage = 6;
+            specialSpeed = 0;
+            specialLifetime = 30;
         }
         else if (host == "Brawler") {
             attacks.add("Smash");
@@ -87,6 +105,22 @@ public class Player extends Collidable {
             attackCounters.get(2)[0] = 1000000;
             attackCounters.get(1)[0] = 300;
             attackCounters.get(0)[0] = 1000000;
+
+            basicDamage = 10;
+            basicStagger = 20;
+            basicSize = width;
+            basicStun = 0;
+
+            heavyDamage = 20;
+            heavySizeMult = 1;
+            heavyStun = 40;
+            heavyLifetime = 30;
+
+            defenseDuration = 30;
+            defenseScaling = 1;
+
+            specialDamage = 120;
+            specialLifetime = 30;
         }
         
     }
@@ -168,7 +202,7 @@ public class Player extends Collidable {
 
             //drift upgrades
             case "Dolphin":
-                defenseSpeedMult += 2;
+                defenseScaling += 2;
                 defenseDuration += 100;
                 break;
             case "Salmon":
@@ -180,7 +214,7 @@ public class Player extends Collidable {
 
             //slam upgrades
             case "Trawler":
-                specialScaling += 2;
+                specialDamage += 2;
                 specialLifetime += 1000;
                 break;
             case "Speedboat":
@@ -189,10 +223,10 @@ public class Player extends Collidable {
                 attackCounters.get(0)[0] -= 200;
                 break;
             case "Yacht":
-                specialScaling += 2;
+                specialDamage += 2;
                 break;
             case "Sailboat":
-                specialScaling += 6;
+                specialDamage += 6;
                 break;
 
             //passives
@@ -275,8 +309,13 @@ public class Player extends Collidable {
         else {
             frame = "Idle";
         }
-
-        move(Main.panel.keyHandler.wPressed, Main.panel.keyHandler.aPressed, Main.panel.keyHandler.sPressed, Main.panel.keyHandler.dPressed);
+        if (chargeCounter > 0) {
+            moveInDirection(200/45, direction);
+            chargeCounter--;
+        }
+        else {
+            move(Main.panel.keyHandler.wPressed, Main.panel.keyHandler.aPressed, Main.panel.keyHandler.sPressed, Main.panel.keyHandler.dPressed);
+        }
 
         //basic
         if (Main.panel.mouseHandler.leftClick) {
@@ -314,6 +353,7 @@ public class Player extends Collidable {
                 checkMove(6);
             }
         }
+        
            
     }
 
@@ -386,7 +426,7 @@ public class Player extends Collidable {
         }
         else if (type == "Drift") {
             immune = true;
-            speed = speed * defenseSpeedMult;
+            speed = speed * defenseScaling;
             defenseTimer = defenseDuration;
             if (upgrades.contains("Salmon")) {
                 attackCounters.get(1)[1] = 0; 
@@ -413,7 +453,7 @@ public class Player extends Collidable {
                     mousePosition.x, 
                     mousePosition.y
                 ), 
-                specialSpeed, specialLifetime, specialScaling, true, 15, 0, "sailorSlam"
+                specialSpeed, specialLifetime, specialDamage, true, 15, 0, "sailorSlam"
             );
             Main.projectiles.add(p);
             p.moveInDirection(width, p.direction);
@@ -490,10 +530,7 @@ public class Player extends Collidable {
         if (type == "Punch") {
             Projectile p = new Projectile(
                 x, y, basicSize, basicSize, 
-                pointTowards(
-                    mousePosition.x, 
-                     mousePosition.y
-                 ), 
+                pointTowards(mousePosition.x, mousePosition.y), 
                 0, 30, basicDamage, true, 10, basicStun, "slash"
             );
 
@@ -501,7 +538,45 @@ public class Player extends Collidable {
             p.moveInDirection(p.width, p.direction);
             stun += basicStagger;
         }
-    
+        else if (type == "Charge") {
+            chargeCounter = 40;
+            for (int i = 0; i < 10; i++) {
+                Projectile p = new Projectile(
+                    x, y, (int)(width * heavySizeMult), (int)(height * heavySizeMult), 
+                    pointTowards(mousePosition.x, mousePosition.y), 
+                    0, heavyLifetime, heavyDamage, true, 50 + 2*i, heavyStun, "slash"
+                );
+                p.moveInDirection(20*i, pointTowards(mousePosition.x, mousePosition.y));
+                Main.projectiles.add(p);
+            }
+            direction = pointTowards(mousePosition.x, mousePosition.y);
+            stun = 50;
+        }
+        else if (type == "Block") {
+            Projectile p = new Projectile(
+                x, y, (int)(width * defenseScaling), (int)(height * defenseScaling), 
+                pointTowards(mousePosition.x, mousePosition.y), 
+                0, defenseDuration, 1, true, 10, 0, "block"
+            );
+
+            Main.projectiles.add(p);
+            p.moveInDirection(p.width, p.direction);
+            stun += defenseDuration;
+        }
+        else if (type == "Smash") {
+            Projectile p = new Projectile(
+                x, y, width * 2, height * 2, 
+                pointTowards(
+                    mousePosition.x, 
+                    mousePosition.y
+                ), 
+                0, specialLifetime, specialDamage, true, 15, 100, "smash"
+            );
+            Main.projectiles.add(p);
+            p.moveInDirection(width, p.direction);
+            p.direction = 0;
+            stun += basicStagger;
+        }
     }
 
 }

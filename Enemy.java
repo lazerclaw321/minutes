@@ -86,9 +86,9 @@ public class Enemy extends Collidable {
             stun += 30;
         }
         if ((type == "ranged" || type == "snake")) {
-            counter2 += 1;
             frame = "Idle"; 
             if (counter <= 0) {
+                counter2++;
                 Projectile p = new Projectile(
                     x, y, 10, 10, 
                     pointTowards(

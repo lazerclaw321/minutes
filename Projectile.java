@@ -53,10 +53,15 @@ public class Projectile extends Collidable {
         if (lifetime <= 0) {
             health = 0;
         }
-        if (id == "cutlassSlash") {
+        if (id == "cutlassSlash" || id == "block") {
             for (Projectile p : Main.projectiles) {
-                if (p.playerTeam != playerTeam && collision(p)) {
+                if (p.playerTeam != playerTeam && collision(p) && p.delay <= 10) {
                     p.health = 0;
+                    if (id == "block") {
+                        Main.player.health = Math.min(Main.player.health + 5, Main.player.maxHealth);
+                        Main.player.attackCounters.get(Main.player.attacks.indexOf("Charge"))[1] -= Main.player.attackCounters.get(Main.player.attacks.indexOf("Charge"))[0];
+                        Main.player.attackCounters.get(Main.player.attacks.indexOf("Smash"))[1] -= Main.player.attackCounters.get(Main.player.attacks.indexOf("Smash"))[0]/3;
+                    }
                 }
             }
         }
@@ -73,34 +78,42 @@ public class Projectile extends Collidable {
                     }
                     else {
                         e.stun += stun;
-                        if (Main.player.upgrades.contains("Arctic")) {
-                            e.stun += Math.min(35, 5 * e.sinking);
-                        }
                         e.health -= health + Math.ceil(Math.sqrt(e.sinking));
-                        e.sinking += health / 10;
-                        if (id == "sailorSlam") {
-                            e.health -= e.sinking * health - health;
-                            Main.player.health = Math.min(Main.player.maxHealth, Main.player.health + e.sinking * 2);
-                            if (Main.player.attacks.contains("Cannon")) {
-                                Main.player.attackCounters.get(Main.player.attacks.indexOf("Cannon"))[1] -= Main.player.attackCounters.get(Main.player.attacks.indexOf("Cannon"))[0]/20 * e.sinking;
+
+                        if (Main.player.host == "Sailor") {
+                            if (Main.player.upgrades.contains("Arctic")) {
+                                e.stun += Math.min(35, 5 * e.sinking);
                             }
-                            e.sinking = 0;
+                            e.sinking += health / 10;
+                            if (id == "sailorSlam") {
+                                e.health -= e.sinking * health - health;
+                                Main.player.health = Math.min(Main.player.maxHealth, Main.player.health + e.sinking * 2);
+                                if (Main.player.attacks.contains("Cannon")) {
+                                    Main.player.attackCounters.get(Main.player.attacks.indexOf("Cannon"))[1] -= Main.player.attackCounters.get(Main.player.attacks.indexOf("Cannon"))[0]/20 * e.sinking;
+                                }
+                                e.sinking = 0;
+                            }
+                            if (id == "slash" && Main.player.attacks.contains("Cutlass")) {
+                                Main.player.attackCounters.get(Main.player.attacks.indexOf("Cutlass"))[1] -= Main.player.attackCounters.get(Main.player.attacks.indexOf("Cutlass"))[0]/8;
+                            }
+                            if (id == "slash" && Main.player.attacks.contains("Flintlock")) {
+                                Main.player.flintlockCounter++;
+                                Main.panel.attackKeys[2] = Integer.toString(Main.player.flintlockCounter);
+                            }
+                            if ((id == "anchor" || id == "bullet") && Main.player.upgrades.contains("Wind")) {
+                                e.sinking += health/10;
+                                e.health += health;
+                            }
+                            if ((id == "anchor" || id == "bullet") && Main.player.upgrades.contains("Swell")) {
+                                e.health -= (maxLifetime - lifetime)/40;
+                                e.sinking += (maxLifetime - lifetime)/400;
+                            }
                         }
-                        if (id == "slash" && Main.player.attacks.contains("Cutlass")) {
-                            Main.player.attackCounters.get(Main.player.attacks.indexOf("Cutlass"))[1] -= Main.player.attackCounters.get(Main.player.attacks.indexOf("Cutlass"))[0]/8;
+                        
+                        if (Main.player.host == "Brawler") {
+                            
                         }
-                        if (id == "slash" && Main.player.attacks.contains("Flintlock")) {
-                            Main.player.flintlockCounter++;
-                            Main.panel.attackKeys[2] = Integer.toString(Main.player.flintlockCounter);
-                        }
-                        if ((id == "anchor" || id == "bullet") && Main.player.upgrades.contains("Wind")) {
-                            e.sinking += health/10;
-                            e.health += health;
-                        }
-                        if ((id == "anchor" || id == "bullet") && Main.player.upgrades.contains("Swell")) {
-                            e.health -= (maxLifetime - lifetime)/40;
-                             e.sinking += (maxLifetime - lifetime)/400;
-                        }
+
                         if (e.health <= 0) {
                             Main.player.health = Math.min(Main.player.maxHealth, Main.player.health + e.sinking);
                         }
