@@ -778,6 +778,8 @@ public class Enemy extends Collidable {
         if (Main.difficulty == "Hours") {
             this.speed = this.speed/2;
             this.baseSpeed = this.baseSpeed/2;
+            this.health = this.health/2;
+            this.maxHealth = this.maxHealth/2;
         }
         if (Main.difficulty == "Seconds") {
             this.maxHealth *= 2;

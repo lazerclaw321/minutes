@@ -22,7 +22,7 @@ public class UpgradeManager {
     public void initialize() {
         //difficulties
         difficultyTypes.add("Hours");
-        difficultyDescription.add("All enemies and enemy projectiles move half speed and deal half damage.");
+        difficultyDescription.add("All enemies and enemy projectiles move at half speed, have halved health, and deal half damage.");
         difficultyTypes.add("Minutes");
         difficultyDescription.add("Normal gameplay.");
         difficultyTypes.add("Seconds");

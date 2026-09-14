@@ -293,7 +293,7 @@ public class Main {
                 }
             }
             else {
-                if (tempoCounter <= tempoCooldown - tempoDuration && (fps == baseFps/3 || fps == baseFps*12)) {
+                if (tempoCounter <= tempoCooldown - tempoDuration && (fps == baseFps/3 || fps == baseFps*4)) {
                     fps = baseFps;
                 }
                 playerTimeSpeed = 2;

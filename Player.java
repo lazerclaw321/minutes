@@ -6,10 +6,10 @@ import javax.swing.SwingUtilities;
 
 public class Player extends Collidable {
     
-    String host = "Sailor";
+    String host = "Brawler";
 
     int stun;
-    final int maxHealth = 100;
+    int maxHealth = 100;
     String frame = "Idle";
     ArrayList<String> upgrades = new ArrayList<String>();
     int deathTimer = 240;
@@ -107,6 +107,8 @@ public class Player extends Collidable {
             attackCounters.get(0)[0] = 1000000;
 
             speed = 1.2;
+            maxHealth = 120;
+            health = 120;
 
             basicDamage = 7;
             basicStagger = 20;

@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.awt.geom.AffineTransform;
 
@@ -19,7 +20,7 @@ public class GamePanel extends JPanel {
     final File[] projectileImageList = new File("Images/Projectiles").listFiles();
 
     final Font upgradeFont = new Font("Arial", 1, 20);
-    final Font descriptionFont = new Font("Arial", 2, 11);
+    final Font descriptionFont = new Font("Arial", 2, 13);
 
     final String[] attackKeys = {"Q", "↑", "M2", "M1", "E", "R", "T"};
 
@@ -116,13 +117,16 @@ public class GamePanel extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
         RenderingHints.VALUE_ANTIALIAS_ON);
         if (Main.upgrading) {
-            g2.setColor(Color.BLACK);
-            drawCenteredString(g2, Main.upgrades.choices[0], new Rectangle(Main.panelWidth/4, 100, 1, 1), upgradeFont);
+            setBackground(Color.BLACK);
+            g2.setColor(Color.WHITE);
+            drawCenteredString(g2, Main.upgrades.choices[0], new Rectangle(Main.panelWidth/6, 100, 1, 1), upgradeFont);
             drawCenteredString(g2, Main.upgrades.choices[1], new Rectangle(Main.panelWidth/2, 100, 1, 1), upgradeFont);
-            drawCenteredString(g2, Main.upgrades.choices[2], new Rectangle(Main.panelWidth*3/4, 100, 1, 1), upgradeFont);
-            drawTextBox(g2, Main.upgrades.choiceDescription[0], Main.panelWidth/4, 200, descriptionFont, 50*(int)Main.scale);
-            drawTextBox(g2, Main.upgrades.choiceDescription[1], Main.panelWidth/2, 200, descriptionFont, 50*(int)Main.scale);
-            drawTextBox(g2, Main.upgrades.choiceDescription[2], Main.panelWidth*3/4, 200, descriptionFont, 50*(int)Main.scale);
+            drawCenteredString(g2, Main.upgrades.choices[2], new Rectangle(Main.panelWidth*5/6, 100, 1, 1), upgradeFont);
+            drawTextBox(g2, Main.upgrades.choiceDescription[0], Main.panelWidth/6, 200, descriptionFont, 100*(int)Main.scale);
+            drawTextBox(g2, Main.upgrades.choiceDescription[1], Main.panelWidth/2, 200, descriptionFont, 100*(int)Main.scale);
+            drawTextBox(g2, Main.upgrades.choiceDescription[2], Main.panelWidth*5/6, 200, descriptionFont, 100*(int)Main.scale);
+            g2.drawRect(Main.panelWidth/3 - 1, 0, 2, Main.panelHeight);
+            g2.drawRect(Main.panelWidth*2/3 - 1, 0, 2, Main.panelHeight);
         }
         else if (Main.fps < 9000) {
             if (Main.noDamage) {
@@ -138,8 +142,9 @@ public class GamePanel extends JPanel {
                     drawScaledImage(g2, Main.scale, images.get(Main.backup.host + Main.backup.frame), (int)Main.backup.x, (int)Main.backup.y, Main.backup.width, Main.backup.height);
                 }
             }
-
-            for (Projectile p : Main.projectiles) {
+            ArrayList<Projectile> projectileRender = (ArrayList<Projectile>) Main.projectiles.clone();
+            ArrayList<Enemy> enemyRender = (ArrayList<Enemy>) Main.enemies.clone();
+            for (Projectile p : projectileRender) {
                 g2.setColor(Color.RED);
                 if (p.delay > 0 && !p.playerTeam) {
                     drawScaledImage(g2, Main.scale, images.get("delay"), (int)p.x, (int)p.y, p.width, p.height);
@@ -153,7 +158,7 @@ public class GamePanel extends JPanel {
                     }
                 }
             }
-            for (Enemy e : Main.enemies) {
+            for (Enemy e : enemyRender) {
                 if (images.containsKey(e.type + e.frame)) {
                     if (Math.abs(e.direction) > 3.14/2) {
                         drawScaledImage(g2, Main.scale, images.get(e.type + e.frame), (int)e.x, (int)e.y, e.width, e.height);
