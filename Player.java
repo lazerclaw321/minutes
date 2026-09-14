@@ -40,7 +40,7 @@ public class Player extends Collidable {
     boolean immune = false;
 
     int confusionTimer = 0;
-    int flintlockCounter = 0;
+    int ammoCounter = 0;
     int chargeCounter = 0;
 
     public Player(int health, double speed) {
@@ -106,7 +106,9 @@ public class Player extends Collidable {
             attackCounters.get(1)[0] = 300;
             attackCounters.get(0)[0] = 1000000;
 
-            basicDamage = 10;
+            speed = 1.2;
+
+            basicDamage = 7;
             basicStagger = 20;
             basicSize = width;
             basicStun = 0;
@@ -114,7 +116,7 @@ public class Player extends Collidable {
             heavyDamage = 20;
             heavySizeMult = 1;
             heavyStun = 40;
-            heavyLifetime = 30;
+            heavyLifetime = 40;
 
             defenseDuration = 30;
             defenseScaling = 1;
@@ -166,99 +168,142 @@ public class Player extends Collidable {
 
     public void upgrade(String upgrade) {
         upgrades.add(upgrade);
-        switch(upgrade) {
-            //hook upgrades
-            case "Slip":
-                basicStagger = 0;
-                basicDamage += 2;
-                break;
-            case "Figure 8":
-                attackCounters.get(3)[0] -= 10;
-                break;
-            case "Bowline":
-                basicDamage += 10;
-                break;
-            case "Hitch":
-                basicSize += 5;
-                basicStun += 30;
-                break;
+        if (host == "Sailor") {
+            switch(upgrade) {
+                //hook upgrades
+                case "Slip":
+                    basicStagger = 0;
+                    basicDamage += 2;
+                    break;
+                case "Figure 8":
+                    attackCounters.get(3)[0] -= 10;
+                    break;
+                case "Bowline":
+                    basicDamage += 10;
+                    break;
+                case "Hitch":
+                    basicSize += 5;
+                    basicStun += 30;
+                    break;
 
-            //anchor upgrades
-            case "Tsunami":
-                heavyDamage += 10;
-                heavyStun += 60;
-                heavySizeMult += 1;
-                break;
-            case "Wind":
-                attackCounters.get(2)[0] -= 300;
-                break;
-            case "Tidal":
-                attackCounters.get(2)[0] -= 100;
-                break;
-            case "Swell":
-                heavyLifetime += 1000;
-                attackCounters.get(2)[0] -= 100;
-                break;
+                //anchor upgrades
+                case "Tsunami":
+                    heavyDamage += 10;
+                    heavyStun += 60;
+                    heavySizeMult += 1;
+                    break;
+                case "Wind":
+                    attackCounters.get(2)[0] -= 300;
+                    break;
+                case "Tidal":
+                    attackCounters.get(2)[0] -= 100;
+                    break;
+                case "Swell":
+                    heavyLifetime += 1000;
+                    attackCounters.get(2)[0] -= 100;
+                    break;
 
-            //drift upgrades
-            case "Dolphin":
-                defenseScaling += 2;
-                defenseDuration += 100;
-                break;
-            case "Salmon":
-                attackCounters.get(1)[0] -= 50;
-                break;
-            case "Sardine":
-                attackCounters.get(1)[0] -= 200;
-                break;
+                //drift upgrades
+                case "Dolphin":
+                    defenseScaling += 2;
+                    defenseDuration += 100;
+                    break;
+                case "Salmon":
+                    attackCounters.get(1)[0] -= 50;
+                    break;
+                case "Sardine":
+                    attackCounters.get(1)[0] -= 200;
+                    break;
 
-            //slam upgrades
-            case "Trawler":
-                specialDamage += 2;
-                specialLifetime += 1000;
-                break;
-            case "Speedboat":
-                specialSpeed += 4;
-                specialLifetime += 60;
-                attackCounters.get(0)[0] -= 200;
-                break;
-            case "Yacht":
-                specialDamage += 2;
-                break;
-            case "Sailboat":
-                specialDamage += 6;
-                break;
+                //slam upgrades
+                case "Trawler":
+                    specialDamage += 2;
+                    specialLifetime += 1000;
+                    break;
+                case "Speedboat":
+                    specialSpeed += 4;
+                    specialLifetime += 60;
+                    attackCounters.get(0)[0] -= 200;
+                    break;
+                case "Yacht":
+                    specialDamage += 2;
+                    break;
+                case "Sailboat":
+                    specialDamage += 6;
+                    break;
 
-            //passives
-            case "Pacific":
-                width += 10;
-                height += 10;
-                basicSize += 10;
-                speed += 0.5;
-                break;
+                //passives
+                case "Pacific":
+                    width += 10;
+                    height += 10;
+                    basicSize += 10;
+                    speed += 0.5;
+                    break;
 
-            //moves
-            case "Grapple":
-                attacks.add("Grapple");
-                int[] grappleStats = {300, 0};
-                attackCounters.add(grappleStats);
-                break;
-            case "Cannon":
-                attacks.add("Cannon");
-                int[] cannonStats = {1000000, 0};
-                attackCounters.add(cannonStats);
-                break;
-            case "Cutlass":
-                attacks.add("Cutlass");
-                int[] cutlassStats = {1000000, 0};
-                attackCounters.add(cutlassStats);
-                break;
-            case "Flintlock":
-                attacks.set(2, "Flintlock");
-                int[] flintlockStats = {Main.baseFps/2, 0};
-                attackCounters.set(2, flintlockStats);
-                heavyLifetime += 400;
-                break;
+                //moves
+                case "Grapple":
+                    attacks.add("Grapple");
+                    int[] grappleStats = {300, 0};
+                    attackCounters.add(grappleStats);
+                    break;
+                case "Cannon":
+                    attacks.add("Cannon");
+                    int[] cannonStats = {1000000, 0};
+                    attackCounters.add(cannonStats);
+                    break;
+                case "Cutlass":
+                    attacks.add("Cutlass");
+                    int[] cutlassStats = {1000000, 0};
+                    attackCounters.add(cutlassStats);
+                    break;
+                case "Flintlock":
+                    attacks.set(2, "Flintlock");
+                    int[] flintlockStats = {Main.baseFps/2, 0};
+                    attackCounters.set(2, flintlockStats);
+                    heavyLifetime += 400;
+                    break;
+            }
+        }
+        if (host == "Brawler") {
+            switch (upgrade) {
+                //punch upgrades
+                case "punch1":
+                    basicStagger -= 5;
+                    break;
+                case "Zoom Punch":
+                    basicDamage += 2;
+                    break;
+                case "punch3":
+                    basicDamage += 30;
+                    break;
+
+                //charge upgrades
+                case "charge1":
+                    heavyLifetime += 40;
+                    heavySizeMult += 0.75;
+                    heavyDamage += 10;
+                    break;
+                case "charge2":
+                    attackCounters.get(2)[0] = Main.baseFps*10;
+                    break;
+                case "charge3":
+                    heavyStun = Main.baseFps;
+                    break;
+
+                //block upgrades
+                case "block2":
+                    defenseDuration += 30;
+                    defenseScaling += 1;
+                    attackCounters.get(1)[0] -= 50;
+                    break;
+
+                //smash upgrades
+                case "smash1":
+                    attackCounters.get(0)[0] = Main.baseFps*25;
+                    break;
+                case "smash2":
+                    specialLifetime += 20;
+            }
         }
         for (String s : upgrades) {
             System.out.println(s);
@@ -266,11 +311,9 @@ public class Player extends Collidable {
     }
 
     public void runPlayer() {
-
         for (int[] attackStats : attackCounters) {
             attackStats[1]--;
         }
-
         confusionTimer = Math.max(confusionTimer - 1, 0);
 
         if (health <= 0) {
@@ -288,7 +331,12 @@ public class Player extends Collidable {
             }
             return;
         }
-        
+        if (immune) {
+            frame = "Drift";
+        }
+        else {
+            frame = "Idle";
+        }
         if (stun > 0) {
             stun--;
             return;
@@ -303,15 +351,11 @@ public class Player extends Collidable {
             immune = false;
         }
 
-        if (immune) {
-            frame = "Drift";
-        }
-        else {
-            frame = "Idle";
-        }
+        
         if (chargeCounter > 0) {
             moveInDirection(200/45, direction);
             chargeCounter--;
+            return;
         }
         else {
             move(Main.panel.keyHandler.wPressed, Main.panel.keyHandler.aPressed, Main.panel.keyHandler.sPressed, Main.panel.keyHandler.dPressed);
@@ -500,7 +544,7 @@ public class Player extends Collidable {
             p.moveInDirection(p.width, p.direction);
             stun += basicStagger;
         }
-        else if (type == "Flintlock" && flintlockCounter >= 1) {    
+        else if (type == "Flintlock" && ammoCounter >= 1) {    
             Projectile p = new Projectile(
                 x, y, (int)(width * heavySizeMult/2), (int)(height * heavySizeMult/2), 
                 pointTowards(
@@ -522,35 +566,49 @@ public class Player extends Collidable {
             }
             Main.projectiles.add(p);
             stun = 20;
-            flintlockCounter--;
-            Main.panel.attackKeys[2] = Integer.toString(Main.player.flintlockCounter);
+            ammoCounter--;
+            Main.panel.attackKeys[2] = Integer.toString(Main.player.ammoCounter);
         }
         
         //brawler
-        if (type == "Punch") {
+        if (type == "Punch" && (!upgrades.contains("punch3") || ammoCounter >= 1)) {
             Projectile p = new Projectile(
                 x, y, basicSize, basicSize, 
                 pointTowards(mousePosition.x, mousePosition.y), 
-                0, 30, basicDamage, true, 10, basicStun, "slash"
+                0, 30, basicDamage, true, 10, basicStun, "punch"
             );
 
             Main.projectiles.add(p);
             p.moveInDirection(p.width, p.direction);
+            if (upgrades.contains("Zoom Punch")) {
+                p.moveInDirection(p.width, p.direction);
+            }
+            if (upgrades.contains("punch3")) {
+                ammoCounter--;
+                Main.panel.attackKeys[3] = Integer.toString(ammoCounter);
+            }
             stun += basicStagger;
         }
         else if (type == "Charge") {
-            chargeCounter = 40;
-            for (int i = 0; i < 10; i++) {
+            chargeCounter = (int)(heavyLifetime * heavySizeMult);
+            for (int i = 0; i < heavyLifetime/4; i++) {
                 Projectile p = new Projectile(
                     x, y, (int)(width * heavySizeMult), (int)(height * heavySizeMult), 
                     pointTowards(mousePosition.x, mousePosition.y), 
-                    0, heavyLifetime, heavyDamage, true, 50 + 2*i, heavyStun, "slash"
+                    0, 30, heavyDamage, true, 50 + 2*i, heavyStun, "slash"
                 );
-                p.moveInDirection(20*i, pointTowards(mousePosition.x, mousePosition.y));
+                p.moveInDirection(width*heavySizeMult*i, pointTowards(mousePosition.x, mousePosition.y));
                 Main.projectiles.add(p);
             }
             direction = pointTowards(mousePosition.x, mousePosition.y);
             stun = 50;
+            if (upgrades.contains("charge2")) {
+                immune = true;
+                defenseTimer = 50;
+            }
+            if (upgrades.contains("charge3")) {
+                health = Math.min(health + 5, maxHealth);
+            }
         }
         else if (type == "Block") {
             Projectile p = new Projectile(
@@ -562,6 +620,14 @@ public class Player extends Collidable {
             Main.projectiles.add(p);
             p.moveInDirection(p.width, p.direction);
             stun += defenseDuration;
+
+            if (upgrades.contains("block1")) {
+                health = Math.min(health + 2, maxHealth);
+            }
+            if (upgrades.contains("block4")) {
+                immune = true;
+                defenseTimer = defenseDuration;
+            }
         }
         else if (type == "Smash") {
             Projectile p = new Projectile(

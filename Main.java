@@ -289,7 +289,7 @@ public class Main {
         if (tempo == "Rust") {
             if (!((panel.keyHandler.aPressed||panel.keyHandler.wPressed)||(panel.keyHandler.sPressed||panel.keyHandler.dPressed))) {
                 if (tempoCounter <= tempoCooldown - tempoDuration && (fps == baseFps*3 || fps == baseFps)) {
-                    fps = baseFps*12;
+                    fps = baseFps*4;
                 }
             }
             else {

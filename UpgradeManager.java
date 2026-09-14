@@ -39,7 +39,7 @@ public class UpgradeManager {
 
         //speed up time
         tempoTypes.add("Rust");
-        tempoDescription.add("While you are not moving, time moves 36 times faster. While moving, time moves three times faster and your speed of time is doubled. Activate to make the game run normal speed.");
+        tempoDescription.add("While you are not moving, time moves 12 times faster. While moving, time moves three times faster and your speed of time is doubled. Activate to make the game run normal speed.");
         tempoTypes.add("Rush");
         tempoDescription.add("Doubles the speed of time for yourself and halves the speed of time for enemies for 1 second. Hold to use. Recharges after 10 seconds");
         tempoTypes.add("Zion");
@@ -75,66 +75,105 @@ public class UpgradeManager {
         tempoTypes.add("Null");
         tempoDescription.add("Skip the time of all attacks for 5 minutes, clearing them. Cooldown of 3 second.");
 
-        //upgrades
-        //hook
-        upgradeTypes.add("Slip");
-        upgradeDescription.add("You can move and use other attacks when using hook. Hook deals 2 more damage.");
-        upgradeTypes.add("Figure 8");
-        upgradeDescription.add("Every eighth hook is larger and deals four times the damage. Hook's cooldown is reduced slightly.");
-        upgradeTypes.add("Bowline");
-        upgradeDescription.add("Hook deals 10 more damage. You lose 1 HP when you use hook");
-        upgradeTypes.add("Hitch");
-        upgradeDescription.add("Hook stuns for 0.25 seconds and is 5 pixels larger");
+        if (Main.player.host == "Sailor") {
+            //hook
+            upgradeTypes.add("Slip");
+            upgradeDescription.add("You can move and use other attacks when using hook. Hook deals 2 more damage.");
+            upgradeTypes.add("Figure 8");
+            upgradeDescription.add("Every eighth hook is larger and deals four times the damage. Hook's cooldown is reduced slightly.");
+            upgradeTypes.add("Bowline");
+            upgradeDescription.add("Hook deals 10 more damage. You lose 1 HP when you use hook");
+            upgradeTypes.add("Hitch");
+            upgradeDescription.add("Hook stuns for 0.25 seconds and is 5 pixels larger");
 
-        //anchor
-        upgradeTypes.add("Tsunami");
-        upgradeDescription.add("Anchor now deals 10 more damage, stuns for 2x the duration, and is larger.");
-        upgradeTypes.add("Wind");
-        upgradeDescription.add("Anchor now deals no damage, but applies 2x the sinking and has lowered cooldown");
-        upgradeTypes.add("Tidal");
-        upgradeDescription.add("Anchor shoots a small anchor with halved stats 20 frames after. Anchor now stuns you for a short time. Anchor's cooldown is reduced slightly.");
-        upgradeTypes.add("Swell");
-        upgradeDescription.add("Anchor now bounces off walls and deals more damage the longer it has been on the screen. Anchor lasts for twice as long and has reduced cooldown.");
+            //anchor
+            upgradeTypes.add("Tsunami");
+            upgradeDescription.add("Anchor now deals 10 more damage, stuns for 2x the duration, and is larger.");
+            upgradeTypes.add("Wind");
+            upgradeDescription.add("Anchor now deals no damage, but applies 2x the sinking and has lowered cooldown");
+            upgradeTypes.add("Tidal");
+            upgradeDescription.add("Anchor shoots a small anchor with halved stats 20 frames after. Anchor now stuns you for a short time. Anchor's cooldown is reduced slightly.");
+            upgradeTypes.add("Swell");
+            upgradeDescription.add("Anchor now bounces off walls and deals more damage the longer it has been on the screen. Anchor lasts for twice as long and has reduced cooldown.");
 
-        //drift
-        upgradeTypes.add("Dolphin");
-        upgradeDescription.add("Drift increases speed twice as much and lasts twice as long");
-        upgradeTypes.add("Salmon");
-        upgradeDescription.add("Drift puts anchor off cooldown. Drift has a slightly lowered cooldown.");
-        upgradeTypes.add("Sardine");
-        upgradeDescription.add("Drift's cooldown is massively decreased. Drift heals 3 HP on use.");
-        upgradeTypes.add("Piranha");
-        upgradeDescription.add("When drift is used, shoot a projectile with half of your anchor's stats to your mouse.");
+            //drift
+            upgradeTypes.add("Dolphin");
+            upgradeDescription.add("Drift increases speed twice as much and lasts twice as long");
+            upgradeTypes.add("Salmon");
+            upgradeDescription.add("Drift puts anchor off cooldown. Drift has a slightly lowered cooldown.");
+            upgradeTypes.add("Sardine");
+            upgradeDescription.add("Drift's cooldown is massively decreased. Drift heals 3 HP on use.");
+            upgradeTypes.add("Piranha");
+            upgradeDescription.add("When drift is used, shoot a projectile with half of your anchor's stats to your mouse.");
 
-        //slam
-        upgradeTypes.add("Trawler");
-        upgradeDescription.add("Slam deals 4 more damage per stack of sinking. Slam lasts a lot longer on the field.");
-        upgradeTypes.add("Speedboat");
-        upgradeDescription.add("Slam is now a projectile. Slam lasts 3x longer. The cooldown of slam is decreased.");
-        upgradeTypes.add("Yacht");
-        upgradeDescription.add("Slam deals 2 more damage per stack of sinking. Slam puts Drift off cooldown.");
-        upgradeTypes.add("Sailboat");
-        upgradeDescription.add("Slam deals 6 more damage per stack of sinking.");
+            //slam
+            upgradeTypes.add("Trawler");
+            upgradeDescription.add("Slam deals 4 more damage per stack of sinking. Slam lasts a lot longer on the field.");
+            upgradeTypes.add("Speedboat");
+            upgradeDescription.add("Slam is now a projectile. Slam lasts 3x longer. The cooldown of slam is decreased.");
+            upgradeTypes.add("Yacht");
+            upgradeDescription.add("Slam deals 2 more damage per stack of sinking. Slam puts Drift off cooldown.");
+            upgradeTypes.add("Sailboat");
+            upgradeDescription.add("Slam deals 6 more damage per stack of sinking.");
 
-        //moves
-        upgradeTypes.add("Grapple");
-        upgradeDescription.add("Use to shoot a projectile that deals 10 damage (scales off hook damage and size and anchor lifetime and stun). When hitting an enemy or the edge of the map, it teleports you there.");
-        upgradeTypes.add("Cannon");
-        upgradeDescription.add("Every stack of sinking consumed by slam decreases this cooldown by 1/20. Use to shoot a projectile that deals 80 damage (scales off anchor stats)");
-        upgradeTypes.add("Cutlass");
-        upgradeDescription.add("Every hook landed decreases this cooldown by 1/8. Use to make a large slash that deals 40 damage and nullifies enemy projectiles that hit it (scales off hook stats)");
-        upgradeTypes.add("Flintlock");
-        upgradeDescription.add("Replace your anchor with a flintlock. When you land an M1, gain 1 shot. Has half of your anchor stats. Anchor lasts 3x longer and is 4x as fast.");
+            //moves
+            upgradeTypes.add("Grapple");
+            upgradeDescription.add("Use to shoot a projectile that deals 10 damage (scales off hook damage and size and anchor lifetime and stun). When hitting an enemy or the edge of the map, it teleports you there.");
+            upgradeTypes.add("Cannon");
+            upgradeDescription.add("Every stack of sinking consumed by slam decreases this cooldown by 1/20. Use to shoot a projectile that deals 80 damage (scales off anchor stats)");
+            upgradeTypes.add("Cutlass");
+            upgradeDescription.add("Every hook landed decreases this cooldown by 1/8. Use to make a large slash that deals 40 damage and nullifies enemy projectiles that hit it (scales off hook stats)");
+            upgradeTypes.add("Flintlock");
+            upgradeDescription.add("Replace your anchor with a flintlock. When you land an M1, gain 1 shot. Has half of your anchor stats. Anchor lasts 3x longer and is 4x as fast.");
 
-        //misc
-        upgradeTypes.add("Arctic");
-        upgradeDescription.add("When sinking is applied, stun the enemy for 5 frames per sinking stack, up to 35 frames. Enemies spawn with one stack of sinking.");
-        upgradeTypes.add("Atlantic");
-        upgradeDescription.add("Enemies move slightly slower per stack of sinking, up to 0.05 pixels per frame.");
-        upgradeTypes.add("Pacific");
-        upgradeDescription.add("You and your melee attacks are bigger. You walk faster");
-        upgradeTypes.add("Indian");
-        upgradeDescription.add("Sinking is applied to each enemy randomly, on average once every seven seconds.");
+            //misc
+            upgradeTypes.add("Arctic");
+            upgradeDescription.add("When sinking is applied, stun the enemy for 5 frames per sinking stack, up to 35 frames. Enemies spawn with one stack of sinking.");
+            upgradeTypes.add("Atlantic");
+            upgradeDescription.add("Enemies move slightly slower per stack of sinking, up to 0.05 pixels per frame.");
+            upgradeTypes.add("Pacific");
+            upgradeDescription.add("You and your melee attacks are bigger. You walk faster");
+            upgradeTypes.add("Indian");
+            upgradeDescription.add("Sinking is applied to each enemy randomly, on average once every seven seconds.");
+        }
+        if (Main.player.host == "Brawler") {
+            //punch
+            upgradeTypes.add("punch1");
+            upgradeDescription.add("Punch decreases the cooldown of charge by 1/5 and smash by 1/15. Punch staggers you for a shorter amount of time");
+            upgradeTypes.add("Zoom Punch");
+            upgradeDescription.add("Punch spawns further in front of you. Punch deals 2 more damage.");
+            upgradeTypes.add("punch3");
+            upgradeDescription.add("Punch now stores block counters, and needs 1 block counter to use. There is a limit of 10 block counters. Punch deals 30 more damage.");
+            
+            //charge
+            upgradeTypes.add("charge1");
+            upgradeDescription.add("Charge is 50% larger and deals 50% more damage.");
+            upgradeTypes.add("charge2");
+            upgradeDescription.add("Charge now has a 10 second cooldown. Become immune to damage while charging.");
+            upgradeTypes.add("charge3");
+            upgradeDescription.add("Charge stuns enemies for 2 seconds. Charge heals 5 hp when used.");
+
+            //block
+            upgradeTypes.add("block1");
+            upgradeDescription.add("Blocking a projectile lowers block's cooldown by 1/2. Using block heals 2 HP.");
+            upgradeTypes.add("block2");
+            upgradeDescription.add("Block is larger, lasts longer, and has a slightly lower cooldown.");
+            upgradeTypes.add("block3");
+            upgradeDescription.add("Block deals damage equal to your punch to all enemies when it blocks a projectile.");
+            upgradeTypes.add("block4");
+            upgradeDescription.add("Blocking a projectile heals 10 hp. Become immune to damage while blocking.");
+
+            //smash
+            upgradeTypes.add("smash1");
+            upgradeDescription.add("Smash now has a 25 second cooldown.");
+            upgradeTypes.add("smash2");
+            upgradeDescription.add("Smash now works as a block, except it reflects projectiles. Smash lasts twice as long.");
+
+            //new moves
+
+            //misc
+        }
+        
     
     }
 

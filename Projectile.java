@@ -7,6 +7,7 @@ public class Projectile extends Collidable {
     int stun;
     boolean area = false;
     String id;
+    Player player;
 
     public Projectile(double x, double y, int width, int height, double direction, double speed, int lifetime, int health, boolean team, int delay, int stun, String id) {
         this.x = x;
@@ -24,6 +25,7 @@ public class Projectile extends Collidable {
         this.delay = delay;
         this.stun = stun;
         this.id = id;
+        this.player = Main.player;
         if (!this.playerTeam && Main.difficulty == "Hours") {
             this.speed = this.speed/2;
         }
@@ -35,7 +37,7 @@ public class Projectile extends Collidable {
             return;
         }
         if (speed > 0) {
-            if (id == "bulletbouncy" || ((id == "anchor" || (id == "bullet" && playerTeam)) && Main.player.upgrades.contains("Swell"))) {
+            if (id == "bulletbouncy" || ((id == "anchor" || (id == "bullet" && playerTeam)) && player.upgrades.contains("Swell"))) {
                 if (x == 0 || x == 0 || x == Main.panelWidth/Main.scale - width) {
                     System.out.println(direction);
                     direction = 3.14-direction;
@@ -53,14 +55,36 @@ public class Projectile extends Collidable {
         if (lifetime <= 0) {
             health = 0;
         }
-        if (id == "cutlassSlash" || id == "block") {
+        if (id == "cutlassSlash" || id == "block" || (id == "smash" && player.upgrades.contains("smash2"))) {
             for (Projectile p : Main.projectiles) {
                 if (p.playerTeam != playerTeam && collision(p) && p.delay <= 10) {
-                    p.health = 0;
-                    if (id == "block") {
-                        Main.player.health = Math.min(Main.player.health + 5, Main.player.maxHealth);
-                        Main.player.attackCounters.get(Main.player.attacks.indexOf("Charge"))[1] -= Main.player.attackCounters.get(Main.player.attacks.indexOf("Charge"))[0];
-                        Main.player.attackCounters.get(Main.player.attacks.indexOf("Smash"))[1] -= Main.player.attackCounters.get(Main.player.attacks.indexOf("Smash"))[0]/3;
+                    if (id == "smash" && player.upgrades.contains("smash2")) {
+                        p.playerTeam = playerTeam;
+                        p.speed = -p.speed;
+                    }
+                    else {
+                        p.health = 0;
+                    }
+                    if (id == "block" || (id == "smash" && player.upgrades.contains("smash2"))) {
+                        player.health = Math.min(player.health + 5, player.maxHealth);
+                        player.attackCounters.get(player.attacks.indexOf("Charge"))[1] -= player.attackCounters.get(player.attacks.indexOf("Charge"))[0];
+                        player.attackCounters.get(player.attacks.indexOf("Smash"))[1] -= player.attackCounters.get(player.attacks.indexOf("Smash"))[0]/3;
+                        if (player.upgrades.contains("punch3")) {
+                            player.ammoCounter = Math.min(10, player.ammoCounter + 1);
+                            Main.panel.attackKeys[3] = Integer.toString(player.ammoCounter);
+                        }
+                        if (player.upgrades.contains("block1")) {
+                            player.attackCounters.get(player.attacks.indexOf("Block"))[1] -= player.attackCounters.get(player.attacks.indexOf("Block"))[0]/2;
+                        }
+                        if (player.upgrades.contains("block3")) {
+                            for (Enemy e : Main.enemies) {
+                                e.health -= player.basicDamage;
+                            }
+                        }
+                        if (player.upgrades.contains("block4")) {
+                            player.health = Math.min(player.health + 5, player.maxHealth);
+                        }
+                        return;
                     }
                 }
             }
@@ -80,42 +104,45 @@ public class Projectile extends Collidable {
                         e.stun += stun;
                         e.health -= health + Math.ceil(Math.sqrt(e.sinking));
 
-                        if (Main.player.host == "Sailor") {
-                            if (Main.player.upgrades.contains("Arctic")) {
+                        if (player.host == "Sailor") {
+                            if (player.upgrades.contains("Arctic")) {
                                 e.stun += Math.min(35, 5 * e.sinking);
                             }
                             e.sinking += health / 10;
                             if (id == "sailorSlam") {
                                 e.health -= e.sinking * health - health;
-                                Main.player.health = Math.min(Main.player.maxHealth, Main.player.health + e.sinking * 2);
-                                if (Main.player.attacks.contains("Cannon")) {
-                                    Main.player.attackCounters.get(Main.player.attacks.indexOf("Cannon"))[1] -= Main.player.attackCounters.get(Main.player.attacks.indexOf("Cannon"))[0]/20 * e.sinking;
+                                player.health = Math.min(player.maxHealth, player.health + e.sinking * 2);
+                                if (player.attacks.contains("Cannon")) {
+                                    player.attackCounters.get(player.attacks.indexOf("Cannon"))[1] -= player.attackCounters.get(player.attacks.indexOf("Cannon"))[0]/20 * e.sinking;
                                 }
                                 e.sinking = 0;
                             }
-                            if (id == "slash" && Main.player.attacks.contains("Cutlass")) {
-                                Main.player.attackCounters.get(Main.player.attacks.indexOf("Cutlass"))[1] -= Main.player.attackCounters.get(Main.player.attacks.indexOf("Cutlass"))[0]/8;
+                            if (id == "slash" && player.attacks.contains("Cutlass")) {
+                                player.attackCounters.get(player.attacks.indexOf("Cutlass"))[1] -= player.attackCounters.get(player.attacks.indexOf("Cutlass"))[0]/8;
                             }
-                            if (id == "slash" && Main.player.attacks.contains("Flintlock")) {
-                                Main.player.flintlockCounter++;
-                                Main.panel.attackKeys[2] = Integer.toString(Main.player.flintlockCounter);
+                            if (id == "slash" && player.attacks.contains("Flintlock")) {
+                                player.ammoCounter++;
+                                Main.panel.attackKeys[2] = Integer.toString(player.ammoCounter);
                             }
-                            if ((id == "anchor" || id == "bullet") && Main.player.upgrades.contains("Wind")) {
+                            if ((id == "anchor" || id == "bullet") && player.upgrades.contains("Wind")) {
                                 e.sinking += health/10;
                                 e.health += health;
                             }
-                            if ((id == "anchor" || id == "bullet") && Main.player.upgrades.contains("Swell")) {
+                            if ((id == "anchor" || id == "bullet") && player.upgrades.contains("Swell")) {
                                 e.health -= (maxLifetime - lifetime)/40;
                                 e.sinking += (maxLifetime - lifetime)/400;
                             }
                         }
                         
-                        if (Main.player.host == "Brawler") {
-                            
+                        if (player.host == "Brawler") {
+                            if (id == "punch" && player.upgrades.contains("punch1")) {
+                                player.attackCounters.get(player.attacks.indexOf("Charge"))[1] -= player.attackCounters.get(player.attacks.indexOf("Charge"))[0]/5;
+                                player.attackCounters.get(player.attacks.indexOf("Smash"))[1] -= player.attackCounters.get(player.attacks.indexOf("Smash"))[0]/15;
+                            }
                         }
 
                         if (e.health <= 0) {
-                            Main.player.health = Math.min(Main.player.maxHealth, Main.player.health + e.sinking);
+                            player.health = Math.min(player.maxHealth, player.health + e.sinking);
                         }
                         health = 0;
                         System.out.println("HIT" + e.health);
@@ -124,37 +151,37 @@ public class Projectile extends Collidable {
             }
         }
         else {
-            if (collision(Main.player) && !Main.player.immune && !Main.noDamage) {
+            if (collision(player) && !player.immune && !Main.noDamage) {
                 if (Main.tempo == "Seer" && Main.tempoCounter <= 0) {
                     Main.panel.keyHandler.spacePressed = true;
                 }
                 else {
                     if (Main.difficulty == "Seconds") {
-                        Main.player.health -= health * 2;
+                        player.health -= health * 2;
                     }
                     else if (Main.difficulty == "Minutes") {
-                        Main.player.health -= health;
+                        player.health -= health;
                     }
                     else {
-                        Main.player.health -= health/2;
+                        player.health -= health/2;
                     }
-                    Main.player.stun += stun;
+                    player.stun += stun;
                     if (Main.rewinded == 0) {
                         int[] damage = {Main.timeCounter, health};
                         Main.damaged.add(damage);
                     }
                     if (id == "smog") {
-                        Main.player.confusionTimer += 500;
-                        System.out.println(Main.player.confusionTimer);
+                        player.confusionTimer += 500;
+                        System.out.println(player.confusionTimer);
                     }
                     health = 0;
-                    System.out.println("HIT" + Main.player.health);
+                    System.out.println("HIT" + player.health);
                 }
             }
         }
         if (health == 0 && id == "grapple") {
             for (int i = 0; i < 200; i++) {
-                Main.player.moveInDirection(1, Main.player.pointTowards(x, y));
+                player.moveInDirection(1, player.pointTowards(x, y));
             }
         }
     }
