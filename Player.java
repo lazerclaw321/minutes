@@ -34,7 +34,7 @@ public class Player extends Collidable {
     int specialSpeed = 0;
     int specialLifetime = 30;
 
-    int figure8Counter = 0;
+    int moveCounter = 0;
 
     int defenseTimer = -1;
     boolean immune = false;
@@ -42,16 +42,18 @@ public class Player extends Collidable {
     int confusionTimer = 0;
     int ammoCounter = 0;
     int chargeCounter = 0;
+    int regenCounter = 0;
 
-    public Player(int health, double speed) {
+    public Player(int health, double speed, String host) {
         this.health = health;
         this.speed = speed;
         this.baseSpeed = speed;
+        this.host = host;
         initializeAttacks();
     }
 
     public Player copy() {
-        Player p = new Player(health, baseSpeed);
+        Player p = new Player(health, baseSpeed, host);
         p.x = x;
         p.y = y;
         for (String upgrade : upgrades) {
@@ -106,9 +108,9 @@ public class Player extends Collidable {
             attackCounters.get(1)[0] = 300;
             attackCounters.get(0)[0] = 1000000;
 
-            speed = 1.2;
-            maxHealth = 120;
-            health = 120;
+            speed += 0.2;
+            maxHealth += 20;
+            health += 20;
 
             basicDamage = 7;
             basicStagger = 20;
@@ -120,7 +122,7 @@ public class Player extends Collidable {
             heavyStun = 40;
             heavyLifetime = 40;
 
-            defenseDuration = 30;
+            defenseDuration = 60;
             defenseScaling = 1;
 
             specialDamage = 120;
@@ -269,42 +271,53 @@ public class Player extends Collidable {
         if (host == "Brawler") {
             switch (upgrade) {
                 //punch upgrades
-                case "punch1":
+                case "Light Punch":
                     basicStagger -= 5;
                     break;
                 case "Zoom Punch":
                     basicDamage += 2;
                     break;
-                case "punch3":
+                case "Heavy Punch":
                     basicDamage += 30;
                     break;
 
                 //charge upgrades
-                case "charge1":
+                case "Walkspeed Override":
                     heavyLifetime += 40;
                     heavySizeMult += 0.75;
                     heavyDamage += 10;
                     break;
-                case "charge2":
+                case "Raging Pace":
                     attackCounters.get(2)[0] = Main.baseFps*10;
                     break;
-                case "charge3":
+                case "Cataclysm":
                     heavyStun = Main.baseFps;
                     break;
 
                 //block upgrades
-                case "block2":
+                case "Protection":
                     defenseDuration += 30;
                     defenseScaling += 1;
                     attackCounters.get(1)[0] -= 50;
                     break;
 
                 //smash upgrades
-                case "smash1":
+                case "Rage":
                     attackCounters.get(0)[0] = Main.baseFps*25;
+                    specialDamage += 30;
                     break;
-                case "smash2":
+                case "Parry":
                     specialLifetime += 20;
+                    break;
+
+                //new moves
+                case "Bandage":
+                    attacks.add("Bandage");
+                    int[] bandageStats = {7200, 0};
+                    attackCounters.add(bandageStats);
+                    maxHealth += 10;
+                    health += 10;
+
             }
         }
         for (String s : upgrades) {
@@ -339,10 +352,7 @@ public class Player extends Collidable {
         else {
             frame = "Idle";
         }
-        if (stun > 0) {
-            stun--;
-            return;
-        }
+        
 
         if (defenseTimer > 0) {
             defenseTimer--;
@@ -359,7 +369,19 @@ public class Player extends Collidable {
             chargeCounter--;
             return;
         }
+        else if (upgrades.contains("Void Rush") && moveCounter == 0 && chargeCounter == 0) {
+            useMove("Charge");
+            moveCounter = 1;
+        }
         else {
+            if (upgrades.contains("Void Rush")) {
+                moveCounter = 0;
+                chargeCounter--;
+            }
+            if (stun > 0) {
+                stun--;
+                return;
+            }
             move(Main.panel.keyHandler.wPressed, Main.panel.keyHandler.aPressed, Main.panel.keyHandler.sPressed, Main.panel.keyHandler.dPressed);
         }
 
@@ -417,9 +439,9 @@ public class Player extends Collidable {
         mousePosition.y = (int)(mousePosition.y/Main.scale);
         //sailor
         if (type == "Hook") {
-            figure8Counter += 1;
+            moveCounter += 1;
             Projectile p = null;
-            if (figure8Counter >= 8 && upgrades.contains("Figure 8")) {
+            if (moveCounter >= 8 && upgrades.contains("Figure 8")) {
                 p = new Projectile(
                     x, y, basicSize * 2, basicSize * 2, 
                     pointTowards(
@@ -428,7 +450,7 @@ public class Player extends Collidable {
                     ), 
                     0, 30, basicDamage * 4, true, 10, basicStun, "slash"
                 );
-                figure8Counter = 0;
+                moveCounter = 0;
             }
             else {
                 p = new Projectile(
@@ -573,7 +595,7 @@ public class Player extends Collidable {
         }
         
         //brawler
-        if (type == "Punch" && (!upgrades.contains("punch3") || ammoCounter >= 1)) {
+        if (type == "Punch" && (!upgrades.contains("Heavy Punch") || ammoCounter >= 1)) {
             Projectile p = new Projectile(
                 x, y, basicSize, basicSize, 
                 pointTowards(mousePosition.x, mousePosition.y), 
@@ -585,7 +607,7 @@ public class Player extends Collidable {
             if (upgrades.contains("Zoom Punch")) {
                 p.moveInDirection(p.width, p.direction);
             }
-            if (upgrades.contains("punch3")) {
+            if (upgrades.contains("Heavy Punch")) {
                 ammoCounter--;
                 Main.panel.attackKeys[3] = Integer.toString(ammoCounter);
             }
@@ -604,11 +626,11 @@ public class Player extends Collidable {
             }
             direction = pointTowards(mousePosition.x, mousePosition.y);
             stun = 50;
-            if (upgrades.contains("charge2")) {
+            if (upgrades.contains("Raging Pace")) {
                 immune = true;
                 defenseTimer = 50;
             }
-            if (upgrades.contains("charge3")) {
+            if (upgrades.contains("Cataclysm")) {
                 health = Math.min(health + 5, maxHealth);
             }
         }
@@ -621,12 +643,13 @@ public class Player extends Collidable {
 
             Main.projectiles.add(p);
             p.moveInDirection(p.width, p.direction);
+            p.direction = 0;
             stun += defenseDuration;
 
-            if (upgrades.contains("block1")) {
+            if (upgrades.contains("Mending")) {
                 health = Math.min(health + 2, maxHealth);
             }
-            if (upgrades.contains("block4")) {
+            if (upgrades.contains("Unbreaking")) {
                 immune = true;
                 defenseTimer = defenseDuration;
             }
@@ -638,12 +661,15 @@ public class Player extends Collidable {
                     mousePosition.x, 
                     mousePosition.y
                 ), 
-                0, specialLifetime, specialDamage, true, 15, 100, "smash"
+                0, specialLifetime, specialDamage, true, 15, 120, "smash"
             );
             Main.projectiles.add(p);
             p.moveInDirection(width, p.direction);
             p.direction = 0;
             stun += basicStagger;
+        }
+        else if (type == "Bandage") {
+            health = Math.min(maxHealth, health + 50);
         }
     }
 

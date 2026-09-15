@@ -257,10 +257,11 @@ public class Enemy extends Collidable {
                         targetX, 
                         targetY
                     ) + random.nextDouble() * 2 - 1, 
-                    0, 10, 2, false, 10, 0, "slash"
+                    0, 10, 2, false, 10, 0, "punch"
                 );
                 Main.projectiles.add(p);
                 p.moveInDirection(width, p.direction);
+                p.direction = 0;
                 counter = cooldown/20;
                 stun = 0;
             }
@@ -423,7 +424,7 @@ public class Enemy extends Collidable {
                             targetX, 
                             targetY
                         ) + random.nextDouble() * 2 - 1, 
-                        0, 10, 5, false, 10, 0, "smash"
+                        0, 10, 5, false, 10, 0, "punch"
                     );
                     Main.projectiles.add(p);
                     p.moveInDirection(width, p.direction);
@@ -618,6 +619,7 @@ public class Enemy extends Collidable {
             }
         }
         if (type == "cmoon") {
+            frame = "Idle";
             Main.player.moveInDirection(-50/distanceFrom(Main.player), Main.player.pointTowards(x, y));
             if (distanceFrom(Main.player) <= 2) {
                 Main.player.health -= 100;
@@ -643,6 +645,8 @@ public class Enemy extends Collidable {
                         ));
                         counter = cooldown;
                     }
+                    stun = 50;
+                    frame = "Attack";
                 }
                 else if (Math.random() <= 0.5) {
                     for (int i = 0; i < 16; i++) {
@@ -656,6 +660,8 @@ public class Enemy extends Collidable {
                         ));
                         counter = cooldown;
                     }
+                    stun = 50;
+                    frame = "Attack";
                 }
                 else {
                     for (int i = 0; i < 3; i++) {
@@ -671,17 +677,21 @@ public class Enemy extends Collidable {
                         Main.projectiles.add(p);
                         counter = cooldown;
                     }
+                    stun = 90;
+                    frame = "Attack";
                 }
             }
             if (counter2 == 6) {
                 counter2 = 0;
                 stun = Main.baseFps * 4;
+                frame = "Stun";
             }
         }
         if (type == "heaven") {
             
             moveToPlayer = false;
             counter2--;
+            frame = "Idle";
             if (counter2 >= 0) {
                 moveInDirection(speed, targetPosition[0]);
                 speed = 200/100;
@@ -711,6 +721,7 @@ public class Enemy extends Collidable {
                         counter = cooldown;
                     }
                     stun = 120;
+                    frame = "Attack";
                 }
                 else if (Math.random() > 0.5) {
                     for (int i = 0; i < 50; i++) {
@@ -724,6 +735,7 @@ public class Enemy extends Collidable {
                         counter = cooldown;
                     }
                     stun = 90;
+                    frame = "Attack";
                 }
                 else {
                     targetPosition[0] = pointTowards(targetX, targetY);
@@ -742,6 +754,7 @@ public class Enemy extends Collidable {
                         Main.projectiles.add(p);
                     }
                     stun = 50;
+                    frame = "Attack";
                 }
                 counter4++;
                 if (counter4 == 6) {

@@ -1,6 +1,9 @@
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 
 public class Main {
@@ -9,7 +12,7 @@ public class Main {
     static final int panelHeight = 800;
     static final double scale = (double)panelWidth/500;
 
-    static public Player player = new Player(100, 1);
+    static public Player player = null;
     static public ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
     static public ArrayList<Enemy> enemies = new ArrayList<Enemy>();
     static public int wave = 0;
@@ -65,6 +68,8 @@ public class Main {
         panel.setFocusable(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
+        selectHost();
+
         upgrades.initialize();
         upgrading = true;
         upgrades.upgrade(false, true);
@@ -133,6 +138,31 @@ public class Main {
         }
     }
 
+    public static void selectHost() {
+        try {
+            Thread.sleep(1000); 
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        while (!Main.panel.mouseHandler.leftClick) {
+            try {
+                Thread.sleep(5); 
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        Point mousePosition = MouseInfo.getPointerInfo().getLocation();
+        SwingUtilities.convertPointFromScreen(mousePosition, Main.panel);
+        if (mousePosition.x < panelWidth/2) {
+            player = new Player(100, 1, "Sailor");
+        }
+        else {
+            player = new Player(100, 1, "Brawler");
+        }
+    }
+
     public static void initiateTempo(String tempo) {
         
         if (tempo == "Halt") {
@@ -176,7 +206,7 @@ public class Main {
         if (tempo == "Cast") {
             tempoCooldown = 4*baseFps;
             tempoDuration = 1;
-            backup = new Player(100, 1);
+            backup = player.copy();
         }
         if (tempo == "Deed") {
             tempoCooldown = 12*baseFps;
@@ -195,7 +225,7 @@ public class Main {
             tempoDuration = 1;
         }
         if (tempo == "Fade") {
-            tempoCooldown = 10*baseFps;
+            tempoCooldown = 5*baseFps;
             tempoDuration = 2*baseFps;
         }
     }

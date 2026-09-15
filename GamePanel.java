@@ -116,15 +116,36 @@ public class GamePanel extends JPanel {
         Graphics2D g2 = (Graphics2D)g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
         RenderingHints.VALUE_ANTIALIAS_ON);
-        if (Main.upgrading) {
+        if (Main.player == null) {
+            //host selection
             setBackground(Color.BLACK);
             g2.setColor(Color.WHITE);
-            drawCenteredString(g2, Main.upgrades.choices[0], new Rectangle(Main.panelWidth/6, 100, 1, 1), upgradeFont);
-            drawCenteredString(g2, Main.upgrades.choices[1], new Rectangle(Main.panelWidth/2, 100, 1, 1), upgradeFont);
-            drawCenteredString(g2, Main.upgrades.choices[2], new Rectangle(Main.panelWidth*5/6, 100, 1, 1), upgradeFont);
-            drawTextBox(g2, Main.upgrades.choiceDescription[0], Main.panelWidth/6, 200, descriptionFont, 100*(int)Main.scale);
-            drawTextBox(g2, Main.upgrades.choiceDescription[1], Main.panelWidth/2, 200, descriptionFont, 100*(int)Main.scale);
-            drawTextBox(g2, Main.upgrades.choiceDescription[2], Main.panelWidth*5/6, 200, descriptionFont, 100*(int)Main.scale);
+            g2.drawRect(Main.panelWidth/2 - 1, 0, 2, Main.panelHeight);
+
+            drawCenteredString(g2, "Sailor", new Rectangle(Main.panelWidth/4, (int)(50*Main.scale), 1, 1), upgradeFont);
+            drawTextBox(g2, "Hook (M1): Deal 10 damage in front of you.", Main.panelWidth/4, (int)(120*Main.scale), descriptionFont, Main.panelWidth/3);
+            drawTextBox(g2, "Anchor (M2): Throw an anchor that deals 20 damage and stuns for a short duration.", Main.panelWidth/4, (int)(180*Main.scale), descriptionFont, Main.panelWidth/3);
+            drawTextBox(g2, "Drift (Shift): Use to become immune to any damage and increase movement speed for a short amount of time.", Main.panelWidth/4, (int)(240*Main.scale), descriptionFont, Main.panelWidth/3);
+            drawTextBox(g2, "Slam (Q): Consumes all stacks of sinking on enemies, healing the player 2x the number of stacks and dealing damage equal to 6x the number of stacks.", Main.panelWidth/4, (int)(300*Main.scale), descriptionFont, Main.panelWidth/3);
+            drawTextBox(g2, "Passives: Every 10 damage dealt applies one stack of sinking. Sinking causes enemies to take more damage when hit (increase by the square root of number of stacks rounded up). Killing an enemy with sinking heals 1 HP per stack of sinking.", Main.panelWidth/4, (int)(360*Main.scale), descriptionFont, Main.panelWidth/3);
+
+            drawCenteredString(g2, "Brawler", new Rectangle(Main.panelWidth*3/4, (int)(50*Main.scale), 1, 1), upgradeFont);
+            drawTextBox(g2, "Punch (M1): Deal 7 damage in front of you.", Main.panelWidth*3/4, (int)(120*Main.scale), descriptionFont, Main.panelWidth/3);
+            drawTextBox(g2, "Charge (M2): Charge towards your mouse position, dealing about 40 damage and stunning for a short duration. Block 1 projectile to put off cooldown.", Main.panelWidth*3/4, (int)(180*Main.scale), descriptionFont, Main.panelWidth/3);
+            drawTextBox(g2, "Block (Shift): Use to block projectiles in front of you. Heal 5HP per projectile blocked. Blocking projectiles puts other moves off cooldown.", Main.panelWidth*3/4, (int)(240*Main.scale), descriptionFont, Main.panelWidth/3);
+            drawTextBox(g2, "Smash (Q): Smash the floor in front of you, dealing 120 damage and stunning for 1 second. Block 3 projectiles to put off cooldown.", Main.panelWidth*3/4, (int)(300*Main.scale), descriptionFont, Main.panelWidth/3);
+            drawTextBox(g2, "Passives: This character has 20 more HP and 20% more speed than other characters.", Main.panelWidth*3/4, (int)(360*Main.scale), descriptionFont, Main.panelWidth/3);
+
+        }
+        else if (Main.upgrading) {
+            setBackground(Color.BLACK);
+            g2.setColor(Color.WHITE);
+            drawCenteredString(g2, Main.upgrades.choices[0], new Rectangle(Main.panelWidth/6, (int)(50*Main.scale), 1, 1), upgradeFont);
+            drawCenteredString(g2, Main.upgrades.choices[1], new Rectangle(Main.panelWidth/2, (int)(50*Main.scale), 1, 1), upgradeFont);
+            drawCenteredString(g2, Main.upgrades.choices[2], new Rectangle(Main.panelWidth*5/6, (int)(50*Main.scale), 1, 1), upgradeFont);
+            drawTextBox(g2, Main.upgrades.choiceDescription[0], Main.panelWidth/6, (int)(120*Main.scale), descriptionFont, Main.panelWidth/5);
+            drawTextBox(g2, Main.upgrades.choiceDescription[1], Main.panelWidth/2, (int)(120*Main.scale), descriptionFont, Main.panelWidth/5);
+            drawTextBox(g2, Main.upgrades.choiceDescription[2], Main.panelWidth*5/6, (int)(120*Main.scale), descriptionFont, Main.panelWidth/5);
             g2.drawRect(Main.panelWidth/3 - 1, 0, 2, Main.panelHeight);
             g2.drawRect(Main.panelWidth*2/3 - 1, 0, 2, Main.panelHeight);
         }

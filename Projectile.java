@@ -55,44 +55,49 @@ public class Projectile extends Collidable {
         if (lifetime <= 0) {
             health = 0;
         }
-        if (id == "cutlassSlash" || id == "block" || (id == "smash" && player.upgrades.contains("smash2"))) {
+        if (id == "cutlassSlash" || id == "block" || (id == "smash" && player.upgrades.contains("Parry"))) {
             for (Projectile p : Main.projectiles) {
                 if (p.playerTeam != playerTeam && collision(p) && p.delay <= 10) {
-                    if (id == "smash" && player.upgrades.contains("smash2")) {
+                    if (id == "smash" && player.upgrades.contains("Parry")) {
                         p.playerTeam = playerTeam;
                         p.speed = -p.speed;
                     }
                     else {
                         p.health = 0;
                     }
-                    if (id == "block" || (id == "smash" && player.upgrades.contains("smash2"))) {
+                    if (id == "block" || (id == "smash" && player.upgrades.contains("Parry"))) {
                         player.health = Math.min(player.health + 5, player.maxHealth);
                         player.attackCounters.get(player.attacks.indexOf("Charge"))[1] -= player.attackCounters.get(player.attacks.indexOf("Charge"))[0];
                         player.attackCounters.get(player.attacks.indexOf("Smash"))[1] -= player.attackCounters.get(player.attacks.indexOf("Smash"))[0]/3;
-                        if (player.upgrades.contains("punch3")) {
+                        if (player.upgrades.contains("Heavy Punch")) {
                             player.ammoCounter = Math.min(10, player.ammoCounter + 1);
                             Main.panel.attackKeys[3] = Integer.toString(player.ammoCounter);
                         }
-                        if (player.upgrades.contains("block1")) {
+                        if (player.upgrades.contains("Mending")) {
                             player.attackCounters.get(player.attacks.indexOf("Block"))[1] -= player.attackCounters.get(player.attacks.indexOf("Block"))[0]/2;
                         }
-                        if (player.upgrades.contains("block3")) {
+                        if (player.upgrades.contains("Bandage")) {
+                            player.attackCounters.get(player.attacks.indexOf("Bandage"))[1] -= player.attackCounters.get(player.attacks.indexOf("Bandage"))[0]/10;
+                        }
+                        if (player.upgrades.contains("Thorns")) {
                             for (Enemy e : Main.enemies) {
                                 e.health -= player.basicDamage;
                             }
                         }
-                        if (player.upgrades.contains("block4")) {
+                        if (player.upgrades.contains("Unbreaking")) {
                             player.health = Math.min(player.health + 5, player.maxHealth);
                         }
-                        return;
                     }
                 }
             }
         }
-
+        if (id == "block") {
+            return;
+        }
         if (playerTeam) {
             for (Enemy e : Main.enemies) {
                 if (collision(e) && !e.immune && !Main.noDamage) {
+                    System.out.println(id + " " + e.type);
                     if (e.type == "diavolo" && e.counter3 <= 0) {
                         Main.noDamage = true;
                         e.counter3 = 480;
@@ -135,7 +140,7 @@ public class Projectile extends Collidable {
                         }
                         
                         if (player.host == "Brawler") {
-                            if (id == "punch" && player.upgrades.contains("punch1")) {
+                            if (id == "punch" && player.upgrades.contains("Light Punch")) {
                                 player.attackCounters.get(player.attacks.indexOf("Charge"))[1] -= player.attackCounters.get(player.attacks.indexOf("Charge"))[0]/5;
                                 player.attackCounters.get(player.attacks.indexOf("Smash"))[1] -= player.attackCounters.get(player.attacks.indexOf("Smash"))[0]/15;
                             }

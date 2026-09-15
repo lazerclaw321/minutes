@@ -138,40 +138,48 @@ public class UpgradeManager {
         }
         if (Main.player.host == "Brawler") {
             //punch
-            upgradeTypes.add("punch1");
+            upgradeTypes.add("Light Punch");
             upgradeDescription.add("Punch decreases the cooldown of charge by 1/5 and smash by 1/15. Punch staggers you for a shorter amount of time");
             upgradeTypes.add("Zoom Punch");
             upgradeDescription.add("Punch spawns further in front of you. Punch deals 2 more damage.");
-            upgradeTypes.add("punch3");
+            upgradeTypes.add("Heavy Punch");
             upgradeDescription.add("Punch now stores block counters, and needs 1 block counter to use. There is a limit of 10 block counters. Punch deals 30 more damage.");
             
             //charge
-            upgradeTypes.add("charge1");
+            upgradeTypes.add("Walkspeed Override");
             upgradeDescription.add("Charge is 50% larger and deals 50% more damage.");
-            upgradeTypes.add("charge2");
+            upgradeTypes.add("Raging Pace");
             upgradeDescription.add("Charge now has a 10 second cooldown. Become immune to damage while charging.");
-            upgradeTypes.add("charge3");
+            upgradeTypes.add("Cataclysm");
             upgradeDescription.add("Charge stuns enemies for 2 seconds. Charge heals 5 hp when used.");
+            upgradeTypes.add("Void Rush");
+            upgradeDescription.add("After charge is done, initiate a second charge.");
 
             //block
-            upgradeTypes.add("block1");
+            upgradeTypes.add("Mending");
             upgradeDescription.add("Blocking a projectile lowers block's cooldown by 1/2. Using block heals 2 HP.");
-            upgradeTypes.add("block2");
+            upgradeTypes.add("Protection");
             upgradeDescription.add("Block is larger, lasts longer, and has a slightly lower cooldown.");
-            upgradeTypes.add("block3");
+            upgradeTypes.add("Thorns");
             upgradeDescription.add("Block deals damage equal to your punch to all enemies when it blocks a projectile.");
-            upgradeTypes.add("block4");
+            upgradeTypes.add("Unbreaking");
             upgradeDescription.add("Blocking a projectile heals 10 hp. Become immune to damage while blocking.");
 
             //smash
-            upgradeTypes.add("smash1");
-            upgradeDescription.add("Smash now has a 25 second cooldown.");
-            upgradeTypes.add("smash2");
+            upgradeTypes.add("Rage");
+            upgradeDescription.add("Smash now has a 25 second cooldown. Smash deals 30 more damage.");
+            upgradeTypes.add("Parry");
             upgradeDescription.add("Smash now works as a block, except it reflects projectiles. Smash lasts twice as long.");
 
+
             //new moves
+            upgradeTypes.add("Bandage");
+            upgradeDescription.add("Use to heal 50 HP. Cooldown of 60 seconds, each block lowers cooldown by 6 seconds. You have 10 more max health.");
+            
 
             //misc
+
+
         }
         
     
@@ -208,7 +216,7 @@ public class UpgradeManager {
         System.out.println(choices[0] + " " + choices[1] + " " + choices[2]);
         Main.panel.repaint();
         try {
-            Thread.sleep(1000); 
+            Thread.sleep(500); 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
