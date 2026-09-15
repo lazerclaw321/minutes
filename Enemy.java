@@ -688,7 +688,6 @@ public class Enemy extends Collidable {
             }
         }
         if (type == "heaven") {
-            
             moveToPlayer = false;
             counter2--;
             frame = "Idle";
