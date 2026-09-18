@@ -71,6 +71,7 @@ public class Main {
         selectHost();
 
         upgrades.initialize();
+        panel.initializeImages();
         upgrading = true;
         upgrades.upgrade(false, true);
         upgrading = true;

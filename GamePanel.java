@@ -28,9 +28,29 @@ public class GamePanel extends JPanel {
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseHandler);
         this.setFocusable(true);
+        
+    }
+
+    public void initializeImages() {
         loadImages(enemyImageList);
         loadImages(playerImageList);
         loadImages(projectileImageList);
+        if (Main.player.host == "Sailor") {
+            splitImage(images.get("SailorMoveIcons"), 6, 4, 16, Main.upgrades.upgradeTypes);
+        }
+        splitImage(images.get("DifficultyIcons"), 1, 3, 16, Main.upgrades.difficultyTypes);
+        splitImage(images.get("TempoIcons"), 17, 1, 16, Main.upgrades.tempoTypes);
+    }
+
+    public void splitImage(BufferedImage image, int rows, int columns, int size, ArrayList<String> names) {
+        int c = 0;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                BufferedImage newImage = image.getSubimage(j * size, i * size, size, size);
+                images.put(names.get(c), newImage);
+                c++;
+            }
+        }
     }
 
     public void drawCenteredString(Graphics g, String text, Rectangle rect, Font font) {
@@ -143,9 +163,12 @@ public class GamePanel extends JPanel {
             drawCenteredString(g2, Main.upgrades.choices[0], new Rectangle(Main.panelWidth/6, (int)(50*Main.scale), 1, 1), upgradeFont);
             drawCenteredString(g2, Main.upgrades.choices[1], new Rectangle(Main.panelWidth/2, (int)(50*Main.scale), 1, 1), upgradeFont);
             drawCenteredString(g2, Main.upgrades.choices[2], new Rectangle(Main.panelWidth*5/6, (int)(50*Main.scale), 1, 1), upgradeFont);
-            drawTextBox(g2, Main.upgrades.choiceDescription[0], Main.panelWidth/6, (int)(120*Main.scale), descriptionFont, Main.panelWidth/5);
-            drawTextBox(g2, Main.upgrades.choiceDescription[1], Main.panelWidth/2, (int)(120*Main.scale), descriptionFont, Main.panelWidth/5);
-            drawTextBox(g2, Main.upgrades.choiceDescription[2], Main.panelWidth*5/6, (int)(120*Main.scale), descriptionFont, Main.panelWidth/5);
+            drawScaledImage(g2, Main.scale, images.get(Main.upgrades.choices[0]), 58, 100, 50, 50);
+            drawScaledImage(g2, Main.scale, images.get(Main.upgrades.choices[1]), 225, 100, 50, 50);
+            drawScaledImage(g2, Main.scale, images.get(Main.upgrades.choices[2]), 392, 100, 50, 50);
+            drawTextBox(g2, Main.upgrades.choiceDescription[0], Main.panelWidth/6, (int)(180*Main.scale), descriptionFont, Main.panelWidth/5);
+            drawTextBox(g2, Main.upgrades.choiceDescription[1], Main.panelWidth/2, (int)(180*Main.scale), descriptionFont, Main.panelWidth/5);
+            drawTextBox(g2, Main.upgrades.choiceDescription[2], Main.panelWidth*5/6, (int)(180*Main.scale), descriptionFont, Main.panelWidth/5);
             g2.drawRect(Main.panelWidth/3 - 1, 0, 2, Main.panelHeight);
             g2.drawRect(Main.panelWidth*2/3 - 1, 0, 2, Main.panelHeight);
         }

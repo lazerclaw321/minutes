@@ -37,16 +37,6 @@ public class UpgradeManager {
         tempoTypes.add("Gold");
         tempoDescription.add("Time is stopped while you are not moving. Activate to move in stopped time for 3 seconds, after which there is a cooldown of 10 seconds.");
 
-        //speed up time
-        tempoTypes.add("Rust");
-        tempoDescription.add("While you are not moving, time moves 12 times faster. While moving, time moves three times faster and your speed of time is doubled. Activate to make the game run normal speed.");
-        tempoTypes.add("Rush");
-        tempoDescription.add("Doubles the speed of time for yourself and halves the speed of time for enemies for 1 second. Hold to use. Recharges after 10 seconds");
-        tempoTypes.add("Zion");
-        tempoDescription.add("Doubles the speed of time for yourself for 20 seconds. Recharges after 40 seconds.");
-        tempoTypes.add("Edge");
-        tempoDescription.add("Use to slow the speed of everything else by 80% for 7 seconds. Recharges after 20 seconds.");
-
         //skip time
         tempoTypes.add("Omit");
         tempoDescription.add("Skip time for 10 seconds, after which there is a 10 second cooldown.");
@@ -58,22 +48,33 @@ public class UpgradeManager {
         //rewind time
         tempoTypes.add("Echo");
         tempoDescription.add("Use to store a past copy of yourself. Use again to rewind into the past copy. Each use has a 15 second cooldown.");
-        tempoTypes.add("Rail");
-        tempoDescription.add("Once at the start of each wave, store a past copy of yourself. Use to reset to said past copy and restart the wave.");
+        tempoTypes.add("Null");
+        tempoDescription.add("Undo the time of all projectiles to before they were shot (clear all projectiles). Cooldown of 3 seconds.");
 
+        //speed up time
+        tempoTypes.add("Rush");
+        tempoDescription.add("Doubles the speed of time for yourself and halves the speed of time for enemies for 1 second. Hold to use. Recharges after 10 seconds");
+        tempoTypes.add("Zion");
+        tempoDescription.add("Doubles the speed of time for yourself for 20 seconds. Recharges after 40 seconds.");
+        tempoTypes.add("Edge");
+        tempoDescription.add("Use to slow the speed of everything else by 80% for 7 seconds. Recharges after 20 seconds.");
+        tempoTypes.add("Rust");
+        tempoDescription.add("While you are not moving, time moves 12 times faster. While moving, time moves three times faster and your speed of time is doubled. Activate to make the game run normal speed.");
+        
         //alternate dimension
         tempoTypes.add("Cast");
         tempoDescription.add("Switch positions with a clone of yourself that is frozen in time. There is a 4 second cooldown between swaps.");
         tempoTypes.add("Deed");
         tempoDescription.add("Switch with a new copy of yourself from an alternative timeline for 3 seconds. There is a 9 second cooldown between swaps.");
+        tempoTypes.add("Rail");
+        tempoDescription.add("Once at the start of each wave, store a past copy of yourself. Use to reset to said past copy and restart the wave.");
 
         //misc
         tempoTypes.add("Fade");
         tempoDescription.add("The speed of time and size of projectiles slow the closer they get to you.");
         tempoTypes.add("Wing");
         tempoDescription.add("Hold this abillity to percieve time four times slower and see in skipped time.");
-        tempoTypes.add("Null");
-        tempoDescription.add("Skip the time of all attacks for 5 minutes, clearing them. Cooldown of 3 second.");
+        
 
         if (Main.player.host == "Sailor") {
             //hook
@@ -116,6 +117,16 @@ public class UpgradeManager {
             upgradeTypes.add("Sailboat");
             upgradeDescription.add("Slam deals 6 more damage per stack of sinking.");
 
+            //misc
+            upgradeTypes.add("Arctic");
+            upgradeDescription.add("When sinking is applied, stun the enemy for 5 frames per sinking stack, up to 35 frames. Enemies spawn with one stack of sinking.");
+            upgradeTypes.add("Atlantic");
+            upgradeDescription.add("Enemies move slightly slower per stack of sinking, up to 0.05 pixels per frame.");
+            upgradeTypes.add("Pacific");
+            upgradeDescription.add("You and your melee attacks are bigger. You walk faster");
+            upgradeTypes.add("Indian");
+            upgradeDescription.add("Sinking is applied to each enemy randomly, on average once every seven seconds.");
+        
             //moves
             upgradeTypes.add("Grapple");
             upgradeDescription.add("Use to shoot a projectile that deals 10 damage (scales off hook damage and size and anchor lifetime and stun). When hitting an enemy or the edge of the map, it teleports you there.");
@@ -126,15 +137,6 @@ public class UpgradeManager {
             upgradeTypes.add("Flintlock");
             upgradeDescription.add("Replace your anchor with a flintlock. When you land an M1, gain 1 shot. Has half of your anchor stats. Anchor lasts 3x longer and is 4x as fast.");
 
-            //misc
-            upgradeTypes.add("Arctic");
-            upgradeDescription.add("When sinking is applied, stun the enemy for 5 frames per sinking stack, up to 35 frames. Enemies spawn with one stack of sinking.");
-            upgradeTypes.add("Atlantic");
-            upgradeDescription.add("Enemies move slightly slower per stack of sinking, up to 0.05 pixels per frame.");
-            upgradeTypes.add("Pacific");
-            upgradeDescription.add("You and your melee attacks are bigger. You walk faster");
-            upgradeTypes.add("Indian");
-            upgradeDescription.add("Sinking is applied to each enemy randomly, on average once every seven seconds.");
         }
         if (Main.player.host == "Brawler") {
             //punch
