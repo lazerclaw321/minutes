@@ -67,11 +67,11 @@ public class UpgradeManager {
         tempoTypes.add("Deed");
         tempoDescription.add("Switch with a new copy of yourself from an alternative timeline for 3 seconds. There is a 9 second cooldown between swaps.");
         tempoTypes.add("Rail");
-        tempoDescription.add("Once at the start of each wave, store a past copy of yourself. Use to reset to said past copy and restart the wave.");
+        tempoDescription.add("Once at the start of each wave, store a past copy of yourself. Use to reset to said past copy and restart the wave. If used during a wave with an upgrade, take a new upgrade, keeping the old one.");
 
         //misc
         tempoTypes.add("Fade");
-        tempoDescription.add("The speed of time and size of projectiles slow the closer they get to you.");
+        tempoDescription.add("Enemies and opposing projectiles have their time slowed down the closer they get to you. When close enough, they get repelled from you. Hold to use for up to 2 seconds with a 5 second cooldown.");
         tempoTypes.add("Wing");
         tempoDescription.add("Hold this abillity to percieve time four times slower and see in skipped time.");
         
@@ -141,12 +141,14 @@ public class UpgradeManager {
         if (Main.player.host == "Brawler") {
             //punch
             upgradeTypes.add("Light Punch");
-            upgradeDescription.add("Punch decreases the cooldown of charge by 1/5 and smash by 1/15. Punch staggers you for a shorter amount of time");
-            upgradeTypes.add("Zoom Punch");
-            upgradeDescription.add("Punch spawns further in front of you. Punch deals 2 more damage.");
+            upgradeDescription.add("Punch decreases the cooldown of charge by 1/5 and smash by 1/15. Punch staggers you for a shorter amount of time.");
             upgradeTypes.add("Heavy Punch");
             upgradeDescription.add("Punch now stores block counters, and needs 1 block counter to use. There is a limit of 10 block counters. Punch deals 30 more damage.");
-            
+            upgradeTypes.add("Zoom Punch");
+            upgradeDescription.add("Punch spawns further in front of you. Punch deals 2 more damage.");
+            upgradeTypes.add("Sucker Punch");
+            upgradeDescription.add("Punch deals 4x damage on enemies with full HP. Punch stuns enemies with full HP. When hitting an enemy with full HP with punch, heal hp equal to 25% of damage dealt. Punch deals 1 more damage.");
+
             //charge
             upgradeTypes.add("Walkspeed Override");
             upgradeDescription.add("Charge is 50% larger and deals 50% more damage.");
@@ -172,16 +174,30 @@ public class UpgradeManager {
             upgradeDescription.add("Smash now has a 25 second cooldown. Smash deals 30 more damage.");
             upgradeTypes.add("Parry");
             upgradeDescription.add("Smash now works as a block, except it reflects projectiles. Smash lasts twice as long.");
+            upgradeTypes.add("Shock");
+            upgradeDescription.add("Smash stuns enemies twice as long. Smash deals 30 damage to all other enemies.");
+            upgradeTypes.add("Tremor");
+            upgradeDescription.add("Smash doubles stun duration of enemies hit. Stun stuns all enemies for an extra half a second.");
 
+            //misc
+            upgradeTypes.add("Workout");
+            upgradeDescription.add("You walk 25% faster. You passively heal 1 HP every second.");
+            upgradeTypes.add("Muscles");
+            upgradeDescription.add("All your moves deal 25% more damage.");
+            upgradeTypes.add("Fat");
+            upgradeDescription.add("Increase your max health by 300.");
+            upgradeTypes.add("Aura");
+            upgradeDescription.add("Enemies spawn with 5 stacks of sinking (they take 3 more damage per hit)");
 
             //new moves
             upgradeTypes.add("Bandage");
             upgradeDescription.add("Use to heal 50 HP. Cooldown of 60 seconds, each block lowers cooldown by 6 seconds. You have 10 more max health.");
-            
-
-            //misc
-
-
+            upgradeTypes.add("Surge Fist");
+            upgradeDescription.add("Charge and shoot a blue fireball dealing 20 damage, scaling with charge stats. Goes off cooldown on block.");
+            upgradeTypes.add("Defensive Stance");
+            upgradeDescription.add("Get a second block.");
+            upgradeTypes.add("Blood Ritual");
+            upgradeDescription.add("Lose 40 HP, put all your moves but this one on cooldown.");
         }
         
     

@@ -800,5 +800,8 @@ public class Enemy extends Collidable {
         if (Main.player.upgrades.contains("Arctic")) {
             this.sinking = 1;
         }
+        if (Main.player.upgrades.contains("Aura")) {
+            this.sinking += 5;
+        }
     }
 }

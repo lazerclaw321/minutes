@@ -23,6 +23,8 @@ public class GamePanel extends JPanel {
     final Font descriptionFont = new Font("Arial", 2, 13);
 
     final String[] attackKeys = {"Q", "↑", "M2", "M1", "E", "R", "T"};
+    final String[] moves = {"Hook", "Anchor", "Drift", "Slam", "Grapple", "Cannon", "Cutlass", "Flintlock", "Punch", "Charge", "Block", "Smash", "Bandage", "Surge Punch", "Defensive Stance", "Ritual"};
+    final ArrayList<String> moveNames = new ArrayList<String>();
 
     public GamePanel() {
         this.addKeyListener(keyHandler);
@@ -35,11 +37,18 @@ public class GamePanel extends JPanel {
         loadImages(enemyImageList);
         loadImages(playerImageList);
         loadImages(projectileImageList);
+        for (String s : moves) {
+            moveNames.add(s);
+        }
         if (Main.player.host == "Sailor") {
             splitImage(images.get("SailorMoveIcons"), 6, 4, 16, Main.upgrades.upgradeTypes);
         }
+        if (Main.player.host == "Brawler") {
+            splitImage(images.get("BrawlerMoveIcons"), 6, 4, 16, Main.upgrades.upgradeTypes);
+        }
         splitImage(images.get("DifficultyIcons"), 1, 3, 16, Main.upgrades.difficultyTypes);
         splitImage(images.get("TempoIcons"), 17, 1, 16, Main.upgrades.tempoTypes);
+        splitImage(images.get("Moves"), 4, 4, 16, moveNames);
     }
 
     public void splitImage(BufferedImage image, int rows, int columns, int size, ArrayList<String> names) {
@@ -125,6 +134,20 @@ public class GamePanel extends JPanel {
         g2.fillRect((int)(x*scale), (int)(y*scale), (int)(width * scale), height);
         g2.setColor(front);
         g2.fillRect((int)(x*scale), (int)(y*scale), (int)(width * percentage * scale), height);
+    }
+
+    public void drawImageBar(Graphics2D g2, double scale, int x, int y, int width, int height, double percentage, Color back, BufferedImage front) {
+        g2.setColor(back);
+        percentage = Math.min(1.0, Math.max(0.0, percentage));
+        if (front != null) {
+            drawScaledImage(g2, scale, front, x, y, width, height);
+            if ((int)(front.getHeight() * percentage) >= height) {
+                g2.fillRect((int)(x*scale), (int)(y*scale), (int)(width * scale), height);
+            }
+            else {
+                g2.fillRect((int)(x*scale), (int)(y*scale), (int)(width * scale), (int)(height * percentage * scale));
+            }
+        }
     }
 
     public void drawScaledImage(Graphics2D g2, double scale, BufferedImage image, int x, int y, int width, int height) {
@@ -235,8 +258,8 @@ public class GamePanel extends JPanel {
             }
             for (int i = 0; i < Main.player.attacks.size(); i++) {
                 int[] attackCounters = Main.player.attackCounters.get(i);
-                drawBar(g2, 1, Main.panelWidth * (9 - i) / 10, Main.panelHeight * 8 / 9 + Main.panelHeight / 30, Main.panelWidth / 30, Main.panelHeight / 30, (double)attackCounters[1]/(double)attackCounters[0], Color.BLACK, Color.BLUE);
-                drawCenteredString(g2, attackKeys[i], new Rectangle(Main.panelWidth * (19 - 2 * i) / 20, Main.panelHeight * 8 / 9 + Main.panelHeight / 30, 1, 1), upgradeFont);
+                drawImageBar(g2, 1.0, Main.panelWidth * (9 - i) / 10, Main.panelHeight * 8 / 9, Main.panelWidth / 15, Main.panelHeight / 15, ((double)attackCounters[1]/(double)attackCounters[0]), Color.BLACK, images.get(Main.player.attacks.get(i)));
+                drawCenteredString(g2, attackKeys[i], new Rectangle(Main.panelWidth * (75 - 8*i) / 80, Main.panelHeight * 31 / 36, 1, 1), upgradeFont);
             }
         }
         g2.dispose();

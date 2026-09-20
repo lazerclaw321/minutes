@@ -33,6 +33,7 @@ public class Player extends Collidable {
     int specialDamage = 6;
     int specialSpeed = 0;
     int specialLifetime = 30;
+    int specialStun = 120;
 
     int moveCounter = 0;
 
@@ -42,6 +43,8 @@ public class Player extends Collidable {
     int confusionTimer = 0;
     int ammoCounter = 0;
     int chargeCounter = 0;
+
+    int regenTime = -1;
     int regenCounter = 0;
 
     public Player(int health, double speed, String host) {
@@ -127,6 +130,7 @@ public class Player extends Collidable {
 
             specialDamage = 120;
             specialLifetime = 30;
+            specialStun = 120;
         }
         
     }
@@ -280,6 +284,9 @@ public class Player extends Collidable {
                 case "Heavy Punch":
                     basicDamage += 30;
                     break;
+                case "Sucker Punch":
+                    basicDamage += 1;
+                    break;
 
                 //charge upgrades
                 case "Walkspeed Override":
@@ -309,6 +316,24 @@ public class Player extends Collidable {
                 case "Parry":
                     specialLifetime += 20;
                     break;
+                case "Shock":
+                    specialStun += 120;
+                    break;
+
+                //passives
+                case "Workout":
+                    speed += 0.3;
+                    regenTime = 120;
+                    break;
+                case "Muscles":
+                    basicDamage += 2;
+                    heavyDamage += 5;
+                    specialDamage += 30;
+                    break;
+                case "Fat":
+                    maxHealth += 300;
+                    health += 300;
+                    break;
 
                 //new moves
                 case "Bandage":
@@ -317,6 +342,22 @@ public class Player extends Collidable {
                     attackCounters.add(bandageStats);
                     maxHealth += 10;
                     health += 10;
+                    break;
+                case "Surge Fist":
+                    attacks.add("Surge Fist");
+                    int[] surgeFistStats = {1000000, 0};
+                    attackCounters.add(surgeFistStats);
+                    break;
+                case "Defensive Stance":
+                    attacks.add("Defensive Stance");
+                    int[] blockStats = {300, 0};
+                    attackCounters.add(blockStats);
+                    break;
+                case "Blood Ritual":
+                    attacks.add("Ritual");
+                    int[] ritualStats = {600, 0};
+                    attackCounters.add(ritualStats);
+                    break;
 
             }
         }
@@ -330,7 +371,7 @@ public class Player extends Collidable {
             attackStats[1]--;
         }
         confusionTimer = Math.max(confusionTimer - 1, 0);
-
+        regenCounter++;
         if (health <= 0) {
             deathTimer--;
         }
@@ -362,7 +403,10 @@ public class Player extends Collidable {
             speed = baseSpeed;
             immune = false;
         }
-
+        if (regenCounter >= regenTime && regenTime >= 1) {
+            health = Math.min(maxHealth, health + 1);
+            regenCounter = 0;
+        }
         
         if (chargeCounter > 0) {
             moveInDirection(200/45, direction);
@@ -634,7 +678,7 @@ public class Player extends Collidable {
                 health = Math.min(health + 5, maxHealth);
             }
         }
-        else if (type == "Block") {
+        else if (type == "Block" || type == "Defensive Stance") {
             Projectile p = new Projectile(
                 x, y, (int)(width * defenseScaling), (int)(height * defenseScaling), 
                 pointTowards(mousePosition.x, mousePosition.y), 
@@ -661,7 +705,7 @@ public class Player extends Collidable {
                     mousePosition.x, 
                     mousePosition.y
                 ), 
-                0, specialLifetime, specialDamage, true, 15, 120, "smash"
+                0, specialLifetime, specialDamage, true, 15, specialStun, "smash"
             );
             Main.projectiles.add(p);
             p.moveInDirection(width, p.direction);
@@ -670,6 +714,24 @@ public class Player extends Collidable {
         }
         else if (type == "Bandage") {
             health = Math.min(maxHealth, health + 50);
+        }
+        else if (type == "Surge Fist") {    
+            Projectile p = new Projectile(
+                x, y, (int)(width * heavySizeMult), (int)(height * heavySizeMult), 
+                pointTowards(
+                    mousePosition.x, 
+                    mousePosition.y
+                ), 
+                1, 2000, heavyDamage, true, 20, 0, "blueFireball"
+            );
+            Main.projectiles.add(p);
+            stun = 20;
+        }
+        else if (type == "Ritual") {
+            health -= 40;
+            for (int[] stats : attackCounters) {
+                stats[1] = 0;
+            }
         }
     }
 

@@ -79,6 +79,9 @@ public class Projectile extends Collidable {
                         if (player.upgrades.contains("Bandage")) {
                             player.attackCounters.get(player.attacks.indexOf("Bandage"))[1] -= player.attackCounters.get(player.attacks.indexOf("Bandage"))[0]/10;
                         }
+                        if (player.upgrades.contains("Surge Fist")) {
+                            player.attackCounters.get(player.attacks.indexOf("Surge Fist"))[1] -= player.attackCounters.get(player.attacks.indexOf("Surge Fist"))[0];
+                        }
                         if (player.upgrades.contains("Thorns")) {
                             for (Enemy e : Main.enemies) {
                                 e.health -= player.basicDamage;
@@ -143,6 +146,23 @@ public class Projectile extends Collidable {
                             if (id == "punch" && player.upgrades.contains("Light Punch")) {
                                 player.attackCounters.get(player.attacks.indexOf("Charge"))[1] -= player.attackCounters.get(player.attacks.indexOf("Charge"))[0]/5;
                                 player.attackCounters.get(player.attacks.indexOf("Smash"))[1] -= player.attackCounters.get(player.attacks.indexOf("Smash"))[0]/15;
+                            }
+                            if (id == "punch" && player.upgrades.contains("Sucker Punch") && e.health >= e.maxHealth - player.basicDamage) {
+                                e.health -= health * 3;
+                                e.stun += 60;
+                                player.health = Math.min(player.maxHealth, player.health + health);
+                            }
+                            if (id == "smash" && player.upgrades.contains("Shock")) {
+                                e.health += 30;
+                                for (Enemy e2 : Main.enemies) {
+                                    e2.health -= 30;
+                                }
+                            }
+                            if (id == "smash" && player.upgrades.contains("Tremor")) {
+                                for (Enemy e2 : Main.enemies) {
+                                    e2.stun += 60;
+                                }
+                                e.stun *= 2;
                             }
                         }
 
