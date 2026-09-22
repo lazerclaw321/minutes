@@ -188,7 +188,7 @@ public class Main {
         }
         if (tempo == "Rush") {
             tempoCooldown = 10*baseFps;
-            tempoDuration = 2*baseFps; //1 second to player
+            tempoDuration = 1*baseFps; //1 second to player
         }
         if (tempo == "Rust") {
             tempoCooldown = 20*baseFps;
@@ -224,6 +224,11 @@ public class Main {
         if (tempo == "Null") {
             tempoCooldown = 3*baseFps;
             tempoDuration = 1;
+        }
+        if (tempo == "Blip") {
+            tempoCooldown = baseFps;
+            tempoDuration = baseFps;
+            backup = player.copy();
         }
         if (tempo == "Fade") {
             tempoCooldown = 5*baseFps;
@@ -278,12 +283,12 @@ public class Main {
             tempoCounter = Math.min(tempoCounter + 2, tempoCooldown - tempoDuration);
             if (panel.keyHandler.spacePressed && tempoCounter > tempoCooldown/tempoDuration) {
                 tempoCounter -= tempoCooldown / tempoDuration;
-                fps = baseFps*2;
                 playerTimeSpeed = 4;
+                fps = baseFps * 4;
             }
             else if (playerTimeSpeed == 4) {
-                fps = baseFps;
                 playerTimeSpeed = 1;
+                fps = baseFps;
             }
         }
         if (tempo == "Zion") {
@@ -375,6 +380,19 @@ public class Main {
                     player = backup;
                     backup = null;
                 }
+            }
+        }
+        if (tempo == "Blip") {
+            if (tempoCounter <= 0) {
+                tempoCooldown = tempoDuration;
+                tempoCounter = tempoCooldown;
+                backup = player.copy();
+            }
+            if (panel.keyHandler.spacePressed && backup != null) {
+                player = backup;
+                backup = null;
+                tempoCooldown *= 5;
+                tempoCounter = tempoCooldown;
             }
         }
         if (tempo == "Rail") {

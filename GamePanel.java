@@ -47,7 +47,7 @@ public class GamePanel extends JPanel {
             splitImage(images.get("BrawlerMoveIcons"), 6, 4, 16, Main.upgrades.upgradeTypes);
         }
         splitImage(images.get("DifficultyIcons"), 1, 3, 16, Main.upgrades.difficultyTypes);
-        splitImage(images.get("TempoIcons"), 17, 1, 16, Main.upgrades.tempoTypes);
+        splitImage(images.get("TempoIcons"), 6, 3, 16, Main.upgrades.tempoTypes);
         splitImage(images.get("Moves"), 4, 4, 16, moveNames);
     }
 

@@ -50,14 +50,14 @@ public class UpgradeManager {
         tempoDescription.add("Use to store a past copy of yourself. Use again to rewind into the past copy. Each use has a 15 second cooldown.");
         tempoTypes.add("Null");
         tempoDescription.add("Undo the time of all projectiles to before they were shot (clear all projectiles). Cooldown of 3 seconds.");
+        tempoTypes.add("Blip");
+        tempoDescription.add("Every second, save a past copy of yourself. Use to rewind into the past copy. Each use has a 5 second cooldown.");
 
         //speed up time
         tempoTypes.add("Rush");
-        tempoDescription.add("Doubles the speed of time for yourself and halves the speed of time for enemies for 1 second. Hold to use. Recharges after 10 seconds");
+        tempoDescription.add("Quadruple the speed of time for yourself for 1 second. Hold to use. Recharges after 10 seconds");
         tempoTypes.add("Zion");
         tempoDescription.add("Doubles the speed of time for yourself for 20 seconds. Recharges after 40 seconds.");
-        tempoTypes.add("Edge");
-        tempoDescription.add("Use to slow the speed of everything else by 80% for 7 seconds. Recharges after 20 seconds.");
         tempoTypes.add("Rust");
         tempoDescription.add("While you are not moving, time moves 12 times faster. While moving, time moves three times faster and your speed of time is doubled. Activate to make the game run normal speed.");
         
@@ -69,12 +69,13 @@ public class UpgradeManager {
         tempoTypes.add("Rail");
         tempoDescription.add("Once at the start of each wave, store a past copy of yourself. Use to reset to said past copy and restart the wave. If used during a wave with an upgrade, take a new upgrade, keeping the old one.");
 
-        //misc
+        //slow down time
         tempoTypes.add("Fade");
         tempoDescription.add("Enemies and opposing projectiles have their time slowed down the closer they get to you. When close enough, they get repelled from you. Hold to use for up to 2 seconds with a 5 second cooldown.");
         tempoTypes.add("Wing");
         tempoDescription.add("Hold this abillity to percieve time four times slower and see in skipped time.");
-        
+        tempoTypes.add("Edge");
+        tempoDescription.add("Use to slow the speed of everything else by 80% for 7 seconds. Recharges after 20 seconds.");
 
         if (Main.player.host == "Sailor") {
             //hook
@@ -193,7 +194,7 @@ public class UpgradeManager {
             upgradeTypes.add("Bandage");
             upgradeDescription.add("Use to heal 50 HP. Cooldown of 60 seconds, each block lowers cooldown by 6 seconds. You have 10 more max health.");
             upgradeTypes.add("Surge Fist");
-            upgradeDescription.add("Charge and shoot a blue fireball dealing 20 damage, scaling with charge stats. Goes off cooldown on block.");
+            upgradeDescription.add("Charge and shoot a blue fireball dealing 40 damage, scaling with charge stats. Goes off cooldown on block.");
             upgradeTypes.add("Defensive Stance");
             upgradeDescription.add("Get a second block.");
             upgradeTypes.add("Blood Ritual");

@@ -56,11 +56,14 @@ public class Player extends Collidable {
     }
 
     public Player copy() {
-        Player p = new Player(health, baseSpeed, host);
+        Player p = new Player(100, baseSpeed, host);
         p.x = x;
         p.y = y;
         for (String upgrade : upgrades) {
             p.upgrade(upgrade);
+        }
+        for (int i = 0; i < attackCounters.size(); i++) {
+            p.attackCounters.get(i)[1] = attackCounters.get(i)[1];
         }
         return p;
     }
@@ -722,7 +725,7 @@ public class Player extends Collidable {
                     mousePosition.x, 
                     mousePosition.y
                 ), 
-                1, 2000, heavyDamage, true, 20, 0, "blueFireball"
+                1, 2000, heavyDamage*2, true, 20, 0, "blueFireball"
             );
             Main.projectiles.add(p);
             stun = 20;
